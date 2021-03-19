@@ -108,7 +108,7 @@ void epithelium_mechanics( Cell* pCell, Phenotype& phenotype, double dt )
 {
 	static int debris_index = microenvironment.find_density_index( "debris");
 	
-	pCell->is_movable = false; 
+	//pCell->is_movable = false; 
 	
 	// if I'm dead, don't bother 
 	if( phenotype.death.dead == true )
@@ -248,13 +248,10 @@ void ROS_induced_apoptosis( Cell* pCell, Phenotype& phenotype, double dt )
 
 void Cell_proliferation( Cell* pCell, Phenotype& phenotype, double dt )
 {
-	/*if(pCell->custom_data["cell_attachment_lifetime"]>50)
+		if(pCell->custom_data["cell_attachment_lifetime"]>50)
 	{std::cout<<"Cell attachment: "<<pCell->custom_data["cell_attachment_lifetime"]<<std::endl;
-		pCell->die();}*/
-		
-	std::cout<<"Simple pressure: "<<pCell->state.simple_pressure<<std::endl;
-	
-	/*
+		pCell->die();}
+			
 	int G0G1_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::G0G1_phase );
 	int S_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::S_phase );
 	
@@ -269,25 +266,33 @@ void Cell_proliferation( Cell* pCell, Phenotype& phenotype, double dt )
 	std::vector<double> cells_position(3);
     cells_position = pCell->position;
 
-	if(cells_position[0]>default_microenvironment_options.X_range[1]-pCell->phenotype.geometry.radius*2
-	|| cells_position[0]<default_microenvironment_options.X_range[0]+pCell->phenotype.geometry.radius*2
-	|| cells_position[1]>default_microenvironment_options.Y_range[1]-pCell->phenotype.geometry.radius*2
-	|| cells_position[1]<default_microenvironment_options.Y_range[0]+pCell->phenotype.geometry.radius*2)
+
+	if(cells_position[0]>default_microenvironment_options.X_range[1]-pCell->phenotype.geometry.radius*3
+	|| cells_position[0]<default_microenvironment_options.X_range[0]+pCell->phenotype.geometry.radius*3
+	|| cells_position[1]>default_microenvironment_options.Y_range[1]-pCell->phenotype.geometry.radius*3
+	|| cells_position[1]<default_microenvironment_options.Y_range[0]+pCell->phenotype.geometry.radius*3)
 	{	
 		pCell->phenotype.cycle.data.transition_rate( G0G1_index , S_index ) = 0;
 		return;
 	}
 			
 	// if not boundary cell, and the simp press is less than threshold then proliferate
-	double simp_press = calculate_simple_pressure_again(pCell);
-	if(simp_press<parameters.doubles("pressure_threshold"))
+	double simp_press = pCell->state.simple_pressure;//calculate_simple_pressure_again(pCell);
+	if(simp_press<0.53 )//parameters.doubles("pressure_threshold"))
 	{
+		if(simp_press>1e-6)
+		{//std::cout<<simp_press<<std::endl;
 		pCell->phenotype.cycle.data.transition_rate( G0G1_index , S_index ) = parameters.doubles("epithelial_cell_proliferation_rate");
+		pCell->is_movable=true;
+		pCell->phenotype.motility.migration_speed = 0.05;
+		}
 	}
 	else
 	{
 		pCell->phenotype.cycle.data.transition_rate( G0G1_index , S_index ) = 0.0;
-	}*/
+		//pCell->is_movable=false;
+		//pCell->phenotype.motility.migration_speed = 0.01;
+	}
 	
 	return;
 

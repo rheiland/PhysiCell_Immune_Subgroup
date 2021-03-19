@@ -208,7 +208,7 @@ void setup_tissue( void )
 	int n = 0; 
 	while( y < y_max )
 	{
-		while( x < x_max )
+		while( x < x_max)
 		{
 			pC = create_cell( get_cell_definition("lung epithelium" ) ); 
 			pC->assign_position( x,y, 0.0 );
@@ -270,14 +270,53 @@ void setup_tissue( void )
 		std::vector<double> position = {0,0,0};
 		position[0] = -4000+1600;
 		int m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*5;
+		microenvironment(m)[nV] += single_virion_density_change*15;
+		position[0] = -4000+1600+1;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*15;
+		position[0] = -4000+1600-1;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*15;
+		position[0] = -4000+1600+2;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*15;
+		
 		position[0] = -4000+2*1600;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*5;
+		microenvironment(m)[nV] += single_virion_density_change*10;
+		position[0] = -4000+2*1600-1;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*10;
+		position[0] = -4000+2*1600+1;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*10;
+		position[0] = -4000+2*1600-2;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*10;
+		
 		position[0] = -4000+3*1600;
 		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*20;
+		position[0] = -4000+3*1600-1;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*20;
+		position[0] = -4000+3*1600+2;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*20;
+		position[0] = -4000+3*1600+1;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*20;
+		
+		position[0] =-4000+4*1600;
+		m = microenvironment.nearest_voxel_index( position ); 
 		microenvironment(m)[nV] += single_virion_density_change*5;
-		position[0] = -4000+4*1600;
+		position[0] =-4000+4*1600+1;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*5;
+		position[0] =-4000+4*1600-1;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*5;
+		position[0] =-4000+4*1600+2;
 		m = microenvironment.nearest_voxel_index( position ); 
 		microenvironment(m)[nV] += single_virion_density_change*5;
 		
