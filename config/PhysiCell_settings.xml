@@ -74,10 +74,10 @@
 
 <PhysiCell_settings version="devel-version">
 	<domain>
-		<x_min>-400</x_min>
-		<x_max>400</x_max>
-		<y_min>-400</y_min>
-		<y_max>400</y_max>
+		<x_min>-4000</x_min>
+		<x_max>4000</x_max>
+		<y_min>-2500</y_min>
+		<y_max>2500</y_max>
 		<z_min>-10</z_min>
 		<z_max>10</z_max>
 		<dx>20</dx>
@@ -336,9 +336,9 @@
 				<apoptosis_hill_power type="double" units="none" 
 					description="Hill power for viral load apoptosis response">1</apoptosis_hill_power> 
 				<infected_cell_chemokine_secretion_rate units="1/min" type="double"
-					description="max rate that infected cells secrete chemokine">1</infected_cell_chemokine_secretion_rate>
+					description="max rate that infected cells secrete chemokine">0.5</infected_cell_chemokine_secretion_rate>
 				<debris_secretion_rate units="1/min" type="double"
-					description="rate that dead cells release debris">1</debris_secretion_rate>
+					description="rate that dead cells release debris">0.5</debris_secretion_rate>
 				<infected_cell_chemokine_secretion_activated units="none" type="double"
 					description="used internally to track activation of chemokine secretion">0</infected_cell_chemokine_secretion_activated>
 				<interferon_secretion_rate_via_infection type="double" units="1/min" 
@@ -399,7 +399,7 @@
 				<activated_speed units="micron/min" type="double" 
 					description="speed after activation">0.4</activated_speed>
 				<activated_cytokine_secretion_rate units="1/min" type="double" 
-					description="rate of secreting pro-inflamatory cytokine after activation">1</activated_cytokine_secretion_rate>
+					description="rate of secreting pro-inflamatory cytokine after activation">0.1</activated_cytokine_secretion_rate>
 
 				<DC_leaving_not_dying units="dimensionless" type="double" 
 					description="used internally to track activation state">0.0</DC_leaving_not_dying>
@@ -426,7 +426,6 @@
 					<speed units="micron/min">0</speed>
 					<persistence_time units="min">5</persistence_time>
 					<migration_bias units="dimensionless">0</migration_bias>
-					
 					<options>
 						<enabled>true</enabled>
 						<use_2D>true</use_2D>
@@ -757,7 +756,7 @@
 			<number_of_CD8_Tcells type="int" units="none" 
 				description="initial number of CD8 T cells in tissue">0</number_of_CD8_Tcells>
 			<number_of_macrophages type="int" units="none" 
-				description="initial number of macrophages">4</number_of_macrophages><!-- 4 -->
+				description="initial number of macrophages">250</number_of_macrophages><!-- 4 -->
 			<number_of_neutrophils type="int" units="none" 
 				description="initial number of neutrophils">0</number_of_neutrophils>
 		<!-- (Adrianne) initial number of DCs in the lung -->
@@ -808,7 +807,7 @@
 			<IC_50_IFN type="double" units="cells" 
 				description="IFN half effect on viral efficacy">30</IC_50_IFN>
 			<IFN_secretion_rate type="double" units="cells" 
-				description="IFN secretion rate from infected cells">0.1</IFN_secretion_rate>
+				description="IFN secretion rate from infected cells">0.05</IFN_secretion_rate>
 			
 			<CD8_Tcell_color type="string" units="cells" 
 				description="CD8 T cell color">red</CD8_Tcell_color>
