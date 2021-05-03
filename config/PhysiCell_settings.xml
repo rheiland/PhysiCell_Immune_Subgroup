@@ -74,10 +74,10 @@
 
 <PhysiCell_settings version="devel-version">
 	<domain>
-		<x_min>-4000</x_min>
-		<x_max>4000</x_max>
-		<y_min>-2500</y_min>
-		<y_max>2500</y_max>
+		<x_min>-400</x_min>
+		<x_max>400</x_max>
+		<y_min>-400</y_min>
+		<y_max>400</y_max>
 		<z_min>-10</z_min>
 		<z_max>10</z_max>
 		<dx>20</dx>
@@ -261,9 +261,9 @@
 				</death>					
 
 				<volume>  
-					<total units="micron^3">2494</total>
+					<total units="micron^3">2500</total>
 					<fluid_fraction units="dimensionless">0.75</fluid_fraction>
-					<nuclear units="micron^3">540</nuclear>
+					<nuclear units="micron^3">289</nuclear>
 					
 					<fluid_change_rate units="1/min">0.05</fluid_change_rate>
 					<cytoplasmic_biomass_change_rate units="1/min">0.0045</cytoplasmic_biomass_change_rate>
@@ -326,6 +326,11 @@
 				<molecular />
 			</phenotype>
 			<custom_data>  
+			
+							<!-- ********************************************* -->
+				<generation units="dimensionless" type="int"
+					description="cell proliferation generation">3</generation>
+				<!-- ********************************************* -->
 				<!-- for internal viral dynamics --> 
 				<!--<virion units="virions" type="double"
 					description="endocytosed virions">0</virion>-->
@@ -427,7 +432,7 @@
 					<persistence_time units="min">5</persistence_time>
 					<migration_bias units="dimensionless">0</migration_bias>
 					<options>
-						<enabled>true</enabled>
+						<enabled>false</enabled>
 						<use_2D>true</use_2D>
 					</options>
 				</motility>
@@ -565,7 +570,7 @@
 				<activated_speed units="micron/min" type="double" 
 					description="speed after activation">0.4</activated_speed> <!-- 0.4 --> 
 				<activated_cytokine_secretion_rate units="1/min" type="double" 
-					description="rate of secreting pro-inflamatory cytokine after activation">0.1</activated_cytokine_secretion_rate>
+					description="rate of secreting pro-inflamatory cytokine after activation">0.5</activated_cytokine_secretion_rate>
 
 			</custom_data>
 		</cell_definition>		
@@ -744,8 +749,10 @@
 				description="multiplicity of infection: virions/cells at t=0">1</multiplicity_of_infection> <!-- 0.01 debug -->
 			<use_single_infected_cell type="bool" units="none" 
 				description="Infect center cell with one virion (overrides MOI)">false</use_single_infected_cell>
+			<use_small_tissue type="bool" units="none" 
+				description="Infect center cell with one virion (overrides MOI)">true</use_small_tissue>
 			<use_multiple_initial_injection_points type="bool" units="none" 
-				description="Infect center cell with one virion (overrides MOI)">true</use_multiple_initial_injection_points>
+				description="Infect center cell with one virion (overrides MOI)">false</use_multiple_initial_injection_points>
 			<Number_of_virion_arrival_points type="int" units="virions"
 				description="Number of places viruses arrive in the lungs">5</Number_of_virion_arrival_points>
 				
@@ -756,12 +763,12 @@
 			<number_of_CD8_Tcells type="int" units="none" 
 				description="initial number of CD8 T cells in tissue">0</number_of_CD8_Tcells>
 			<number_of_macrophages type="int" units="none" 
-				description="initial number of macrophages">250</number_of_macrophages><!-- 4 -->
+				description="initial number of macrophages">4</number_of_macrophages><!-- 250 -->
 			<number_of_neutrophils type="int" units="none" 
 				description="initial number of neutrophils">0</number_of_neutrophils>
 		<!-- (Adrianne) initial number of DCs in the lung -->
 			<number_of_DCs type="int" units="cells" 
-				description="initial number of Dendritic Cells">28</number_of_DCs> <!--28-->
+				description="initial number of Dendritic Cells">28</number_of_DCs> <!-- 640-->
 		<!-- (Adrianne) initial number of CD4 T cells in the lung -->
 			<number_of_CD4_Tcells type="int" units="none" 
 				description="initial number of CD4 Tcells in tissue">0</number_of_CD4_Tcells> 
@@ -803,11 +810,13 @@
 				description="epithelial cell uptake rate of virus">0.0001</u_Evirus>
 			<rho_half type="double" units="cells" 
 				description="Half uptake virion density">0.125</rho_half>
+			<rho_max type="double" units="cells" 
+				description="Half uptake virion density">0.0125</rho_max>
 			
 			<IC_50_IFN type="double" units="cells" 
-				description="IFN half effect on viral efficacy">30</IC_50_IFN>
+				description="IFN half effect on viral efficacy">5</IC_50_IFN><!-- 30 -->
 			<IFN_secretion_rate type="double" units="cells" 
-				description="IFN secretion rate from infected cells">0.05</IFN_secretion_rate>
+				description="IFN secretion rate from infected cells">0.1</IFN_secretion_rate> <!-- -->
 			
 			<CD8_Tcell_color type="string" units="cells" 
 				description="CD8 T cell color">red</CD8_Tcell_color>
