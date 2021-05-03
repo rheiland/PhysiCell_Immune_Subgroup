@@ -238,7 +238,6 @@ void setup_tissue( void )
 	int number_of_virions = (int) ( parameters.doubles("multiplicity_of_infection") * 
 		(*all_cells).size() ); 
 	double single_virion_density_change = 1.0 / microenvironment.mesh.dV; 
-	
 	// infect the cell closest to the center  
 
 	if( parameters.bools( "use_single_infected_cell" ) == true )
@@ -248,9 +247,24 @@ void setup_tissue( void )
 		double Vvoxel = microenvironment.mesh.voxels[1].volume;
 		pNearestCell->phenotype.molecular.internalized_total_substrates[ nV ] = 1.0/Vvoxel; 
 	}
+	else if( parameters.bools( "use_small_tissue") == true )
+	{
+		std::vector<double> position = {0,0,0};
+		int m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*5;
+		position[0] = 50;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*5;
+		position[0] = -50;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*5;
+		position[0] = -100;
+		m = microenvironment.nearest_voxel_index( position ); 
+		microenvironment(m)[nV] += single_virion_density_change*5;
+		
+	}
 	else if( parameters.bools( "use_multiple_initial_injection_points") == true )
 	{
-		
 		// (adrianne) assign N random points in the domain for the initial virus to be placed
 		/*int number_of_initial_places =  parameters.ints("Number_of_virion_arrival_points");
 		
@@ -319,7 +333,6 @@ void setup_tissue( void )
 		position[0] =-4000+4*1600+2;
 		m = microenvironment.nearest_voxel_index( position ); 
 		microenvironment(m)[nV] += single_virion_density_change*5;
-		
 	}
 	else
 	{		std::cout << "Placing " << number_of_virions << " virions ... " << std::endl; 
@@ -357,7 +370,7 @@ std::vector<std::string> epithelium_coloring_function( Cell* pCell )
 		double Vvoxel = microenvironment.mesh.voxels[1].volume;
 		// find fraction of max viral load 
 		double v = pCell->phenotype.molecular.internalized_total_substrates[nV_external]*Vvoxel;
-
+				
 		double interpolation = 0; 
 		if( v < 1 )
 		{ interpolation = 0; } 

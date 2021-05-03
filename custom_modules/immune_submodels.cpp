@@ -422,9 +422,39 @@ void CD8_Tcell_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 	static int virus_index = microenvironment.find_density_index("virion");
 	int nV_external = virus_index;
 	double virus_amount = pCell->nearest_density_vector()[virus_index];
-	if(virus_amount<1e-6)
-	{pCell->phenotype.cycle.data.transition_rate(cycle_G0G1_index,cycle_S_index) = 0; }			
+	
+	//if(virus_amount<1e-6)
+	//{pCell->phenotype.cycle.data.transition_rate(cycle_G0G1_index,cycle_S_index) = 0; }			
 	//std::cout<<"CD8 phenotype"<<std::endl;
+	
+	// ***********************************************
+	static int apoptosis_index = pCell->phenotype.death.find_death_model_index( "apoptosis" ); 
+	//int cycle_G0G1_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::G0G1_phase ); 
+	//int cycle_S_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::S_phase ); 
+		
+	// Model for T cell proliferation and death
+	int generation_value = pCell->custom_data["generation"];
+	//std::cout<<"Generation value: "<<generation_value<<std::endl; // print out to command line "generation_value"
+	
+	if(pCell->phenotype.cycle.data.elapsed_time_in_phase<6 &&  pCell->phenotype.cycle.data.current_phase_index==0)
+	{
+		pCell->custom_data["generation"] -= 1;
+	}
+	if(generation_value<0)
+	{
+		// turn death rate up
+		//print death rate
+		//std::cout<<"CD8 Death rate before: " <<pCell->phenotype.death.rates[apoptosis_index]<<std::endl;
+		pCell->phenotype.death.rates[apoptosis_index] = parameters.doubles("Death_rates_of_old_Tcells");
+		pCell->phenotype.death.rates[apoptosis_index] = 100; // new death rate of T cells when they have exceeded generation
+		//std::cout<<"CD8 Death rate after change:  " <<pCell->phenotype.death.rates[apoptosis_index]<<std::endl;
+		// turn proliferate rate off
+	    //(to do this, access the index for the flow cytometry proliferation model, like the apoptosis model, and change the transition rate)
+		pCell->phenotype.cycle.data.transition_rate(cycle_G0G1_index,cycle_S_index) = 0;
+		//std::cout<<"Cell is now old and has generation: "<<generation_value<<std::endl;
+	}
+	// ***********************************************
+	
 	
 	static int debris_index = microenvironment.find_density_index( "debris");
 	

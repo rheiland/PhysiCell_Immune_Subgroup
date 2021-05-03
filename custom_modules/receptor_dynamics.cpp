@@ -65,6 +65,9 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	if( pCell->type != lung_epithelial_type )
 	{ return; } 
 
+	
+	//****************************************************************
+	
 	//std::cout<<"here 1"<<std::endl;
 	static int nV_external = microenvironment.find_density_index( "virion" ); 
 	static int IFN_index = microenvironment.find_density_index("interferon 1");
@@ -78,6 +81,9 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	double u_Evirus = parameters.doubles("u_Evirus");
 	double IFN_internal = pCell->nearest_density_vector()[IFN_index];
 	double IC_50_IFN = parameters.doubles("IC_50_IFN");
+	double rho_max = parameters.doubles("rho_max");
+
+
 
 	if(  IFN_internal<1e-16)
 	{
@@ -93,12 +99,21 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	{
 		pCell->phenotype.secretion.uptake_rates[nV_external] = 0;	
 	}
+	else if(rho_virus>rho_max)
+	{
+		pCell->phenotype.secretion.uptake_rates[nV_external] = u_Evirus_IFN*(rho_max*rho_max/(m_i/Vvoxel+m_half/Vvoxel))*1/rho_virus;
+	}
 	else
 	{ 
-		pCell->phenotype.secretion.uptake_rates[nV_external] = u_Evirus_IFN*(rho_virus/(rho_half+rho_virus))*(m_half/(m_i+m_half));
+		//pCell->phenotype.secretion.uptake_rates[nV_external] = u_Evirus_IFN*(rho_virus/(rho_half+rho_virus))*(m_half/(m_i+m_half));
+		pCell->phenotype.secretion.uptake_rates[nV_external] = u_Evirus_IFN*(rho_virus/(m_i/Vvoxel+m_half/Vvoxel));
 
 	}
 	
+	//****************************************************************
+		
+		
+		
 	//if( rho_virus >100)
 	//{std::cout<<"Extracellular virus: "<<rho_virus<<" rho_half "<<rho_half<<" rho_virus "<<rho_virus<<" m_half "<<m_half<<" m_i "<<m_i<<std::endl;}
 

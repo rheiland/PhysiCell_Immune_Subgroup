@@ -108,7 +108,7 @@ void epithelium_mechanics( Cell* pCell, Phenotype& phenotype, double dt )
 {
 	static int debris_index = microenvironment.find_density_index( "debris");
 	
-	//pCell->is_movable = false; 
+	pCell->is_movable = false; 
 	
 	// if I'm dead, don't bother 
 	if( phenotype.death.dead == true )
@@ -252,7 +252,7 @@ void Cell_proliferation( Cell* pCell, Phenotype& phenotype, double dt )
 	{std::cout<<"Cell attachment: "<<pCell->custom_data["cell_attachment_lifetime"]<<std::endl;
 		pCell->die();}
 			
-	int G0G1_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::G0G1_phase );
+	/*int G0G1_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::G0G1_phase );
 	int S_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::S_phase );
 	
 	double c_j_ccr = 10;
@@ -293,7 +293,7 @@ void Cell_proliferation( Cell* pCell, Phenotype& phenotype, double dt )
 		//pCell->is_movable=false;
 		//pCell->phenotype.motility.migration_speed = 0.01;
 	}
-	
+	*/
 	return;
 
 }
