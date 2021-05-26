@@ -106,7 +106,7 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	else
 	{ 
 		//pCell->phenotype.secretion.uptake_rates[nV_external] = u_Evirus_IFN*(rho_virus/(rho_half+rho_virus))*(m_half/(m_i+m_half));
-		pCell->phenotype.secretion.uptake_rates[nV_external] = u_Evirus_IFN*(rho_virus/(m_i/Vvoxel+m_half/Vvoxel));
+		pCell->phenotype.secretion.uptake_rates[nV_external] = 0;//u_Evirus_IFN*(rho_virus/(m_i/Vvoxel+m_half/Vvoxel));
 
 	}
 	
