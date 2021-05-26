@@ -19,7 +19,7 @@ void simple_internal_virus_response_model_setup( void )
 	
 		// what microenvironment variables do you expect? 
 		// what custom data do I need? 
-	internal_virus_response_model_info.cell_variables.push_back( "max_infected_apoptosis_rate" ); 
+	internal_virus_response_model_info.cell_variables.push_back( "r_max" ); 
 	internal_virus_response_model_info.cell_variables.push_back( "max_apoptosis_half_max" ); 
 	internal_virus_response_model_info.cell_variables.push_back( "apoptosis_hill_power" ); 	
 	
@@ -58,7 +58,7 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 		pCD->phenotype.death.rates[apoptosis_model_index]; 
 	
 	// additional death rate from infectoin  
-	double additional_death_rate = pCell->custom_data["max_infected_apoptosis_rate"] ; 
+	double additional_death_rate = pCell->custom_data["r_max"] ; 
 	
 	double v = pCell->phenotype.molecular.internalized_total_substrates[nV_external] / 
 		pCell->custom_data["max_apoptosis_half_max"] ; 
@@ -72,6 +72,12 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 	double AV = pCell->phenotype.molecular.internalized_total_substrates[nV_external];  
 	
 	static int proinflammatory_cytokine_index = microenvironment.find_density_index( "pro-inflammatory cytokine");
+		
+		
+		
+	return;
+
+	// this is the old viral response model - need to make changes to new models 
 		
 	
 	if( R >= parameters.doubles("Infection_detection_threshold")/Vvoxel - 1e-16 ) 

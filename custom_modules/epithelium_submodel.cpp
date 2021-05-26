@@ -56,12 +56,20 @@ void epithelium_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 	double IFN_prob = IFN_internal/(IC_50_IFN+IFN_internal);
 	
 	double prob_prob = UniformRandom();
-	if( prob_prob<IFN_prob)
+	if( prob_prob<IFN_prob && pCell->custom_data["antiviral_state"]<1)
 	{
 		// cell enters antiviral state
 		//std::cout<<"Cell enters antiviral state "<<prob_prob<<" "<<IFN_prob<<std::endl;
 		pCell->custom_data["antiviral_state"] = 1;
+		
+		// start the counter for the antiviral state - only lasts for 24 hours
+		pCell->custom_data["antiviral_state_timer"] = PhysiCell_globals.current_time+24*60*6;
 	}
+	//else if( pCell->custom_data["antiviral_state"]>0.5 &&  pCell->custom_data["antiviral_state_timer"]<PhysiCell_globals.current_time)
+	//{
+		//std::cout<<pCell->custom_data["antiviral_state_timer"]<<" "<<PhysiCell_globals.current_time<<std::endl;
+		//pCell->custom_data["antiviral_state"] = 0;
+	//}
 	
 /*
 	// cell secretion belongs in viral response 
