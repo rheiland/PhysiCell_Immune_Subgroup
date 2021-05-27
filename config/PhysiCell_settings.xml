@@ -394,6 +394,21 @@
 				<displacement_stor units="simple pressure" type="double"
 					description="displacement">0.0</displacement_stor>
 				
+				<!-- Viral uptake model variables -->
+				
+				<VEx units="External virus" type="double"
+					description="displacement">0.0</VEx>
+				<VAtthi units="Attached virus" type="double"
+					description="displacement">0.0</VAtthi>
+				<VAttlo units="Attached virus" type="double"
+					description="displacement">0.0</VAttlo>
+				<Bhi units="Receptors" type="double"
+					description="displacement">0.0</Bhi>
+				<Blo units="Receptors" type="double"
+					description="displacement">0.0</Blo>
+				<VEn units="Receptors" type="double"
+					description="displacement">0.0</VEn>
+				
 			
 			</custom_data>
 		</cell_definition>
@@ -840,6 +855,26 @@
 				description="Number of cells at homeostasis">2800</carrying_capacity>
 			<pressure_threshold type="double" units="dimensionless"
 				description="pressure_threshold">6.98</pressure_threshold>
+				
+				
+			<kAtthi type="double" units="dimensionless"
+				description="Attachment rate">0.0013</kAtthi>
+			<kAttlo type="double" units="dimensionless"
+				description="Attachment rate">7.4e-4</kAttlo>
+			<kEqhi type="double" units="dimensionless"
+				description="Attachment rate">1.13e-2</kEqhi>
+			<kEqlo type="double" units="dimensionless"
+				description="Attachment rate">8.33e-5</kEqlo>
+			<kEn type="double" units="dimensionless"
+				description="Attachment rate">0.08</kEn>
+			<Btothi type="double" units="dimensionless"
+				description="Attachment rate">150</Btothi>
+			<Btotlo type="double" units="dimensionless"
+				description="Attachment rate">1000</Btotlo>
+			<FFus type="double" units="dimensionless"
+				description="Attachment rate">0.51</FFus>
+			<kFus type="double" units="dimensionless"
+				description="Attachment rate">0.0535</kFus>
 		
 	</user_parameters>
 	

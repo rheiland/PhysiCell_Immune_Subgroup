@@ -91,6 +91,49 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	}
 	double u_Evirus_IFN = u_Evirus*(1-IFN_internal/(IC_50_IFN+IFN_internal));
 	
+	
+	// Determine the binding/unbinding rates from the model of Heldt and Laske to determine cell uptake/secretion rates
+	
+	// drawing variables for uptake from Heldt and Laske models 
+	double VEx = pCell->custom_data["VEx"];
+	double VAtthi = pCell->custom_data["VAtthi"];
+	double VAttlo = pCell->custom_data["VAttlo"];
+	double Bhi = pCell->custom_data["Bhi"];
+	double Blo = pCell->custom_data["Blo"];
+	double VEn = pCell->custom_data["VEn"];
+	
+	// drawing parameters for uptake from Heldt and Laske models
+	double kAtthi = parameters.doubles("kAtthi");
+	double kAttlo = parameters.doubles("kAttlo");
+	double kDishi = parameters.doubles("kAtthi")/parameters.doubles("kEqhi");
+	double kDislo = parameters.doubles("kAttlo")/parameters.doubles("kEqlo");
+	double kEn = parameters.doubles("kEn");
+	double Btothi = parameters.doubles("Btothi");
+	double Btotlo = parameters.doubles("Btotlo");
+	double FFus = parameters.doubles("FFus");
+	double kFus = parameters.doubles("kFus");
+	double kDegVen = (1-FFus)/FFus*kFus;
+	
+	// parameter for time stepping
+	double delta_t = 6;// check?
+	
+	// evaluating Heldt and Laske's ODE models
+	pCell->custom_data["VEx"] += (kDislo*VAttlo+kDishi*VAtthi-(kAtthi*Bhi+kAttlo*Blo)*VEx)*delta_t;
+	pCell->custom_data["VAtthi"] += (kAtthi*Bhi*VEx-kDishi*VAtthi-kEn*VAtthi)*delta_t;
+	pCell->custom_data["VAttlo"] += (kAttlo*Blo*VEx-kDislo*VAttlo-kEn*VAttlo)*delta_t;
+	pCell->custom_data["Bhi"] += Btothi-VAtthi;
+	pCell->custom_data["Blo"] += Btotlo-VAttlo;
+	pCell->custom_data["VEn"] += (kEn*(VAtthi+VAttlo)-(kFus-kDegVen)*VEn)*delta_t;
+	
+	pCell->phenotype.secretion.uptake_rates[nV_external] = (kAtthi*Bhi+kAttlo*Blo)*Vvoxel;
+	pCell->phenotype.secretion.secretion_rates[nV_external] = kDislo*VAttlo+kDishi*VAtthi;
+	
+	//**************************************************************************
+	
+
+	/*
+	OLD VIRUS UPTAKE MODEL 
+	
 	if( rho_virus<1e-6)
 	{
 		pCell->phenotype.secretion.uptake_rates[nV_external] = 0;
@@ -106,10 +149,10 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	else
 	{ 
 		//pCell->phenotype.secretion.uptake_rates[nV_external] = u_Evirus_IFN*(rho_virus/(rho_half+rho_virus))*(m_half/(m_i+m_half));
-		pCell->phenotype.secretion.uptake_rates[nV_external] = 0;//u_Evirus_IFN*(rho_virus/(m_i/Vvoxel+m_half/Vvoxel));
+		pCell->phenotype.secretion.uptake_rates[nV_external] = u_Evirus_IFN*(rho_virus/(m_i/Vvoxel+m_half/Vvoxel));
 
 	}
-	
+	*/
 	//****************************************************************
 		
 		

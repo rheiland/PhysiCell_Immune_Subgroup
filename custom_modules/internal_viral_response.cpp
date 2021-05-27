@@ -33,6 +33,17 @@ void simple_internal_virus_response_model_setup( void )
 	
 	return; 
 }
+void influenza_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, double dt )
+{
+	
+	
+	return;
+}
+
+
+
+
+
 
 void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, double dt )
 {

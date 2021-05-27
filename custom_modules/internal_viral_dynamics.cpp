@@ -87,9 +87,25 @@ void simple_internal_virus_model( Cell* pCell, Phenotype& phenotype, double dt )
 	{IFN_internal = 0;}
 	double gamma_IFN = gamma;//*(1-IFN_internal/(IC_50_IFN+IFN_internal));
 	
+	
+	// Changing viral replication model to match heldt uptake model
+		if(pCell->custom_data["VEn"]>1e-6)
+	{
+		std::cout<<pCell->custom_data["VEn"]<<std::endl;
+		pCell->custom_data["VEn"] += gamma_IFN*dt;
+	}
+	pCell->custom_data["Virions_internalized"] = pCell->custom_data["VEn"];
+	
+	
+	
+	//Old viral replication model
+	/*
+	
 	if(pCell->phenotype.molecular.internalized_total_substrates[nV_external]>1e-6)
 	{pCell->phenotype.molecular.internalized_total_substrates[nV_external] += gamma_IFN*dt;}
 	pCell->custom_data["Virions_internalized"] = pCell->phenotype.molecular.internalized_total_substrates[nV_external];
+	
+	*/
 	
 	return;
 }
