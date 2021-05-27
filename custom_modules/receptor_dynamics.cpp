@@ -110,6 +110,7 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	double kEn = parameters.doubles("kEn");
 	double Btothi = parameters.doubles("Btothi");
 	double Btotlo = parameters.doubles("Btotlo");
+	
 	double FFus = parameters.doubles("FFus");
 	double kFus = parameters.doubles("kFus");
 	double kDegVen = (1-FFus)/FFus*kFus;
