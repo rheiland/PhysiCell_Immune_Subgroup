@@ -82,9 +82,8 @@ void simple_internal_virus_model( Cell* pCell, Phenotype& phenotype, double dt )
 	if(IFN_internal<0)
 	{IFN_internal = 0;}
 	double gamma_IFN = gamma;//*(1-IFN_internal/(IC_50_IFN+IFN_internal));
-	
-	if(pCell->custom_data["VEn"]>1)
-	{intracellular_replication_model(pCell, phenotype, dt);}
+		
+	intracellular_replication_model(pCell, phenotype, dt);
 	
 	//std::cout<<pCell->custom_data["VEn"]<<std::endl;	
 	// Changing viral replication model to match heldt uptake model
@@ -145,8 +144,8 @@ void intracellular_replication_model(  Cell* pCell, Phenotype& phenotype, double
 	static double kFus = parameters.doubles("kFus");
 	static double kImp = parameters.doubles("kImp");
 	static double kExp = parameters.doubles("kExp");
-	static double kRdRp = parameters.doubles("kExp");
-	static double kRel = parameters.doubles("kExp");
+	static double kRdRp = parameters.doubles("kRdRp");
+	static double kRel = parameters.doubles("kRel");
 	
 	static double kBindNP = parameters.doubles("kBindNP");
 	static double kBindM1 = parameters.doubles("kBindM1");
@@ -230,7 +229,8 @@ void intracellular_replication_model(  Cell* pCell, Phenotype& phenotype, double
 	pCell->custom_data["VRel"] += (rRel)*dt;
 
 	
-		std::cout<<"VRel: "<<pCell->custom_data["VRel"]<<std::endl;
+	if(pCell->custom_data["VRel"]>1e-6)
+	{std::cout<<"VRel: "<<pCell->custom_data["VRel"]<<std::endl;}
 
 	return;
 	

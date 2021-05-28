@@ -68,9 +68,9 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 	{
 		std::cout<<"VRel: "<<pCell->custom_data["VRel"]<<std::endl;
 		// secretion rate is equal to the rate virus unbinds from receptors plus secretion of new virions
-		pCell->phenotype.secretion.secretion_rates[nV_external] = 1;
+		pCell->phenotype.secretion.secretion_rates[nV_external] = pCell->custom_data["rRel"]/Vvoxel;
 		//kDislo*VAttlo+kDishi*VAtthi+pCell->custom_data["rRel"]/Vvoxel;
-		
+		std::cout<<"Secretion rate: "<<pCell->phenotype.secretion.secretion_rates[nV_external]<<std::endl;
 		//flag for macrophages that cell has started secreting virions and can now be eaten
 		
 	}

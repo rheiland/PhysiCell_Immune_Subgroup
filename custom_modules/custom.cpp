@@ -251,16 +251,16 @@ void setup_tissue( void )
 	{
 		std::vector<double> position = {0,0,0};
 		int m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*5;
+		microenvironment(m)[nV] += single_virion_density_change*50;
 		position[0] = 50;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*5;
+		microenvironment(m)[nV] += single_virion_density_change*50;
 		position[0] = -50;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*5;
+		microenvironment(m)[nV] += single_virion_density_change*50;
 		position[0] = -100;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*5;
+		microenvironment(m)[nV] += single_virion_density_change*50;
 		
 	}
 	else if( parameters.bools( "use_multiple_initial_injection_points") == true )

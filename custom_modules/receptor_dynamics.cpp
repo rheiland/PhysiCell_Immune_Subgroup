@@ -99,7 +99,7 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	pCell->custom_data["VAttlo"] += (kAttlo*Blo*VEx-kDislo*VAttlo-kEn*VAttlo)*dt;
 	pCell->custom_data["Bhi"] += Btothi-VAtthi;
 	pCell->custom_data["Blo"] += Btotlo-VAttlo;
-	pCell->custom_data["VEn"] += (kEn*(VAtthi+VAttlo))*dt;//-(kFus-kDegVen)*VEn)*delta_t;
+	pCell->custom_data["VEn"] += (kEn*(VAtthi+VAttlo)-(kFus-kDegVen)*VEn)*dt;
 				
 	pCell->phenotype.secretion.uptake_rates[nV_external] = (kAtthi*Bhi+kAttlo*Blo)*Vvoxel;
 	pCell->phenotype.secretion.secretion_rates[nV_external] = kDislo*VAttlo+kDishi*VAtthi;

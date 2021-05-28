@@ -11,9 +11,9 @@
 		</software>
 		<citation />
 		<current_time units="min">0.000000</current_time>
-		<current_runtime units="sec">0.323786</current_runtime>
-		<created>2021-05-28T05:33:24Z</created>
-		<last_modified>2021-05-28T05:33:24Z</last_modified>
+		<current_runtime units="sec">0.322863</current_runtime>
+		<created>2021-05-28T06:11:21Z</created>
+		<last_modified>2021-05-28T06:11:21Z</last_modified>
 	</metadata>
 	<microenvironment>
 		<domain name="microenvironment">
@@ -176,6 +176,7 @@
 							<label index="90" size="1">PNA</label>
 							<label index="91" size="1">PM2</label>
 							<label index="92" size="1">VRel</label>
+							<label index="93" size="1">rRel</label>
 						</labels>
 						<filename>initial_cells_physicell.mat</filename>
 					</simplified_data>

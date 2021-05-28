@@ -467,6 +467,9 @@
 					description="displacement">0.0</PM2>
 				<VRel units="Receptors" type="double"
 					description="displacement">0.0</VRel>
+						
+				<rRel units="Receptors" type="double"
+					description="displacement">0.0</rRel>
 			
 			</custom_data>
 		</cell_definition>
@@ -942,12 +945,8 @@
 				description="Attachment rate">0.02</FSp17>
 			<FSp18 type="double" units="dimensionless"
 				description="Attachment rate">0.125</FSp18>
-			<kEqhi type="double" units="dimensionless"
-				description="Attachment rate">1.13e-2</kEqhi>
-			<kEqlo type="double" units="dimensionless"
-				description="Attachment rate">8.33e-5</kEqlo>
 			<kImp type="double" units="dimensionless"
-				description="Attachment rate">0.01</kImp>
+				description="Attachment rate">0.1</kImp>
 			<kExp type="double" units="dimensionless"
 				description="Attachment rate">1.6667e-8</kExp>
 			<kRdRp type="double" units="dimensionless"
@@ -1016,10 +1015,7 @@
 				description="Attachment rate">100</NPNA>
 			<NPNEP type="double" units="dimensionless"
 				description="Attachment rate">165</NPNEP>
-				
-			<rRel type="double" units="dimensionless"
-				description="Attachment rate">165</rRel>
-							
+										
 							
 	double NPNA = parameters.doubles("NPNA");
 	double NPNEP = parameters.doubles("NPNEP");
