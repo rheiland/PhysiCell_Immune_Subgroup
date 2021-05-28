@@ -408,7 +408,65 @@
 					description="displacement">0.0</Blo>
 				<VEn units="Receptors" type="double"
 					description="displacement">0.0</VEn>
-				
+					
+					
+				<!-- Viral replication model variables -->
+				<Vcytp units="Receptors" type="double"
+					description="displacement">0.0</Vcytp>
+				<Vnucp units="Receptors" type="double"
+					description="displacement">0.0</Vnucp>
+				<RC units="Receptors" type="double"
+					description="displacement">0.0</RC>
+				<RV units="Receptors" type="double"
+					description="displacement">0.0</RV>
+				<RCRdRp units="Receptors" type="double"
+					description="displacement">0.0</RCRdRp>
+				<RVRdRp units="Receptors" type="double"
+					description="displacement">0.0</RVRdRp>
+				<Cp units="Receptors" type="double"
+					description="displacement">0.0</Cp>
+				<VnucPM1 units="Receptors" type="double"
+					description="displacement">0.0</VnucPM1>
+				<VcytPM1 units="Receptors" type="double"
+					description="displacement">0.0</VcytPM1>
+				<RM1 units="Receptors" type="double"
+					description="displacement">0.0</RM1>
+				<RM2 units="Receptors" type="double"
+					description="displacement">0.0</RM2>
+				<RM3 units="Receptors" type="double"
+					description="displacement">0.0</RM3>
+				<RM4 units="Receptors" type="double"
+					description="displacement">0.0</RM4>
+				<RM5 units="Receptors" type="double"
+					description="displacement">0.0</RM5>
+				<RM6 units="Receptors" type="double"
+					description="displacement">0.0</RM6>
+				<RM7 units="Receptors" type="double"
+					description="displacement">0.0</RM7>
+				<RM8 units="Receptors" type="double"
+					description="displacement">0.0</RM8>
+				<PPB1 units="Receptors" type="double"
+					description="displacement">0.0</PPB1>
+				<PPB2 units="Receptors" type="double"
+					description="displacement">0.0</PPB2>
+				<PPA units="Receptors" type="double"
+					description="displacement">0.0</PPA>
+				<PRdRp units="Receptors" type="double"
+					description="displacement">0.0</PRdRp>
+				<PNP units="Receptors" type="double"
+					description="displacement">0.0</PNP>
+				<PM1 units="Receptors" type="double"
+					description="displacement">0.0</PM1>
+				<PNEP units="Receptors" type="double"
+					description="displacement">0.0</PNEP>
+				<PHA units="Receptors" type="double"
+					description="displacement">0.0</PHA>
+				<PNA units="Receptors" type="double"
+					description="displacement">0.0</PNA>
+				<PM2 units="Receptors" type="double"
+					description="displacement">0.0</PM2>
+				<VRel units="Receptors" type="double"
+					description="displacement">0.0</VRel>
 			
 			</custom_data>
 		</cell_definition>
@@ -860,7 +918,7 @@
 			<kAtthi type="double" units="dimensionless"
 				description="Attachment rate">0.0013</kAtthi>
 			<kAttlo type="double" units="dimensionless"
-				description="Attachment rate">7.4e-4</kAttlo>
+				description="Attachment rate">7.5833e-4</kAttlo>
 			<kEqhi type="double" units="dimensionless"
 				description="Attachment rate">1.13e-2</kEqhi>
 			<kEqlo type="double" units="dimensionless"
@@ -876,6 +934,96 @@
 			<kFus type="double" units="dimensionless"
 				description="Attachment rate">0.0535</kFus>
 		
+			
+				<!-- Viral replication model variables -->
+			<DRib type="double" units="dimensionless"
+				description="Attachment rate">160</DRib>
+			<FSp17 type="double" units="dimensionless"
+				description="Attachment rate">0.02</FSp17>
+			<FSp18 type="double" units="dimensionless"
+				description="Attachment rate">0.125</FSp18>
+			<kEqhi type="double" units="dimensionless"
+				description="Attachment rate">1.13e-2</kEqhi>
+			<kEqlo type="double" units="dimensionless"
+				description="Attachment rate">8.33e-5</kEqlo>
+			<kImp type="double" units="dimensionless"
+				description="Attachment rate">0.01</kImp>
+			<kExp type="double" units="dimensionless"
+				description="Attachment rate">1.6667e-8</kExp>
+			<kRdRp type="double" units="dimensionless"
+				description="Attachment rate">0.0167</kRdRp>
+			<kRel type="double" units="dimensionless"
+				description="Attachment rate">6.1667e-5</kRel>
+			<kBindNP type="double" units="dimensionless"
+				description="Attachment rate">5.0167e-6</kBindNP>
+			<kBindM1 type="double" units="dimensionless"
+				description="Attachment rate">2.3167e-8</kBindM1>
+			<kBindRdRp type="double" units="dimensionless"
+				description="Attachment rate">0.01675</kBindRdRp>
+			<kDegRnp type="double" units="dimensionless"
+				description="Attachment rate">0.0015</kDegRnp>
+			<kDegR type="double" units="dimensionless"
+				description="Attachment rate">0.606</kDegR>
+			<kDegRRdRp type="double" units="dimensionless"
+				description="Attachment rate">0.0708</kDegRRdRp>
+			<kDegM type="double" units="dimensionless"
+				description="Attachment rate">0.0055</kDegM>
+			<kSynC type="double" units="dimensionless"
+				description="Attachment rate">0.023</kSynC>
+			<kSynV type="double" units="dimensionless"
+				description="Attachment rate">0.231</kSynV>
+			<kSynM type="double" units="dimensionless"
+				description="Attachment rate">4.1667e-7</kSynM>
+			<kSynP type="double" units="dimensionless"
+				description="Attachment rate">1080</kSynP>
+			<L1 type="double" units="dimensionless"
+				description="Attachment rate">2320</L1>
+			<L2 type="double" units="dimensionless"
+				description="Attachment rate">2320</L2>
+			<L3 type="double" units="dimensionless"
+				description="Attachment rate">2211</L3>
+			<L4 type="double" units="dimensionless"
+				description="Attachment rate">1757</L4>
+			<L5	type="double" units="dimensionless"
+				description="Attachment rate">1540</L5>
+			<L6 type="double" units="dimensionless"
+				description="Attachment rate">1392</L6>
+			<L7 type="double" units="dimensionless"
+				description="Attachment rate">1005</L7>
+			<L8 type="double" units="dimensionless"
+				description="Attachment rate">868</L8>
+			<LV type="double" units="dimensionless"
+				description="Attachment rate">1700</LV>
+			<KVRel type="double" units="dimensionless"
+				description="Attachment rate">10</KVRel>
+			<NNucNP type="double" units="dimensionless"
+				description="Attachment rate">24</NNucNP>
+			<NNucM1 type="double" units="dimensionless"
+				description="Attachment rate">200</NNucM1>
+			<NNucNEP type="double" units="dimensionless"
+				description="Attachment rate">1700</NNucNEP>
+			<NPM1 type="double" units="dimensionless"
+				description="Attachment rate">3000</NPM1>
+			<NPM2 type="double" units="dimensionless"
+				description="Attachment rate">40</NPM2>
+			<NPRdRp type="double" units="dimensionless"
+				description="Attachment rate">45</NPRdRp>
+			<NPHA type="double" units="dimensionless"
+				description="Attachment rate">500</NPHA>
+			<NPNP type="double" units="dimensionless"
+				description="Attachment rate">1000</NPNP>
+			<NPNA type="double" units="dimensionless"
+				description="Attachment rate">100</NPNA>
+			<NPNEP type="double" units="dimensionless"
+				description="Attachment rate">165</NPNEP>
+				
+			<rRel type="double" units="dimensionless"
+				description="Attachment rate">165</rRel>
+							
+							
+	double NPNA = parameters.doubles("NPNA");
+	double NPNEP = parameters.doubles("NPNEP");
+	
 	</user_parameters>
 	
 </PhysiCell_settings>

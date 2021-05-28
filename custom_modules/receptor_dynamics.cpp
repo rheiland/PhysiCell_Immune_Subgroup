@@ -19,41 +19,19 @@ void simple_receptor_dynamics_model_setup(void)
 		// what microenvironment variables do you need 
 	receptor_dynamics_info.microenvironment_variables.push_back( "virion" ); 			
 	
+		// what custom data do I need? 
+	receptor_dynamics_info.cell_variables.push_back( "VAtthi" ); 
+	receptor_dynamics_info.cell_variables.push_back( "VAttlo" ); 
+	receptor_dynamics_info.cell_variables.push_back( "Bhi" ); 	
+	receptor_dynamics_info.cell_variables.push_back( "Blo" ); 	
+	receptor_dynamics_info.cell_variables.push_back( "VEn" ); 	
+	
 	// submodel_registry.register_model( receptor_dynamics_info ); 
 	receptor_dynamics_info.register_model(); 
 	
 	return;
 }
 
-/*
-void receptor_dynamics_model_setup( void )
-{
-		// set version 
-	receptor_dynamics_info.name = "receptor dynamics"; 
-	receptor_dynamics_info.version = receptor_model_version; 
-		// set functions 
-	receptor_dynamics_info.main_function = receptor_dynamics_main_model; 
-	receptor_dynamics_info.phenotype_function = NULL; // pushed into the "main" model  
-	receptor_dynamics_info.mechanics_function = NULL; 	
-		// what microenvironment variables do you need 
-	receptor_dynamics_info.microenvironment_variables.push_back( "virion" ); 		
-	receptor_dynamics_info.microenvironment_variables.push_back( "assembled virion" ); 		
-		// what cell variables and parameters do you need? 
-	receptor_dynamics_info.cell_variables.push_back( "unbound_external_ACE2" ); 
-	receptor_dynamics_info.cell_variables.push_back( "bound_external_ACE2" ); 
-	receptor_dynamics_info.cell_variables.push_back( "unbound_internal_ACE2" ); 
-	receptor_dynamics_info.cell_variables.push_back( "bound_internal_ACE2" ); 
-	
-	receptor_dynamics_info.cell_variables.push_back( "ACE2_binding_rate" ); 
-	receptor_dynamics_info.cell_variables.push_back( "ACE2_endocytosis_rate" ); 
-	receptor_dynamics_info.cell_variables.push_back( "ACE2_cargo_release_rate" ); 	
-	receptor_dynamics_info.cell_variables.push_back( "ACE2_recycling_rate" ); 
-	
-	// submodel_registry.register_model( receptor_dynamics_info ); 
-	receptor_dynamics_info.register_model(); 
-	
-	return; 
-}*/
 
 void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double dt )
 {
@@ -95,7 +73,7 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	// Determine the binding/unbinding rates from the model of Heldt and Laske to determine cell uptake/secretion rates
 	
 	// drawing variables for uptake from Heldt and Laske models 
-	double VEx = pCell->custom_data["VEx"];
+	double VEx = pCell->nearest_density_vector()[nV_external]*Vvoxel;//pCell->custom_data["VEx"];
 	double VAtthi = pCell->custom_data["VAtthi"];
 	double VAttlo = pCell->custom_data["VAttlo"];
 	double Bhi = pCell->custom_data["Bhi"];
@@ -114,18 +92,15 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	double FFus = parameters.doubles("FFus");
 	double kFus = parameters.doubles("kFus");
 	double kDegVen = (1-FFus)/FFus*kFus;
-	
-	// parameter for time stepping
-	double delta_t = 6;// check?
-	
+		
 	// evaluating Heldt and Laske's ODE models
-	pCell->custom_data["VEx"] += (kDislo*VAttlo+kDishi*VAtthi-(kAtthi*Bhi+kAttlo*Blo)*VEx)*delta_t;
-	pCell->custom_data["VAtthi"] += (kAtthi*Bhi*VEx-kDishi*VAtthi-kEn*VAtthi)*delta_t;
-	pCell->custom_data["VAttlo"] += (kAttlo*Blo*VEx-kDislo*VAttlo-kEn*VAttlo)*delta_t;
+	//pCell->custom_data["VEx"] += (kDislo*VAttlo+kDishi*VAtthi-(kAtthi*Bhi+kAttlo*Blo)*VEx)*delta_t;
+	pCell->custom_data["VAtthi"] += (kAtthi*Bhi*VEx-kDishi*VAtthi-kEn*VAtthi)*dt;
+	pCell->custom_data["VAttlo"] += (kAttlo*Blo*VEx-kDislo*VAttlo-kEn*VAttlo)*dt;
 	pCell->custom_data["Bhi"] += Btothi-VAtthi;
 	pCell->custom_data["Blo"] += Btotlo-VAttlo;
-	pCell->custom_data["VEn"] += (kEn*(VAtthi+VAttlo)-(kFus-kDegVen)*VEn)*delta_t;
-	
+	pCell->custom_data["VEn"] += (kEn*(VAtthi+VAttlo))*dt;//-(kFus-kDegVen)*VEn)*delta_t;
+				
 	pCell->phenotype.secretion.uptake_rates[nV_external] = (kAtthi*Bhi+kAttlo*Blo)*Vvoxel;
 	pCell->phenotype.secretion.secretion_rates[nV_external] = kDislo*VAttlo+kDishi*VAtthi;
 	

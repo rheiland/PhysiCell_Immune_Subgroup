@@ -779,8 +779,9 @@ void macrophage_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 				n=neighbors.size();
 				return; 
 			}
-			else if( pTestCell != pCell && pCell->custom_data["ability_to_phagocytose_infected_cell"]== 1 && pTestCell->phenotype.molecular.internalized_total_substrates[nV_external]>parameters.doubles("Infection_detection_threshold")/Vvoxel &&
-				UniformRandom() < probability_of_phagocytosis ) // (Adrianne) macrophages that have been activated by T cells can phagocytose infected cells that contain at least 1 viral protein
+			else if( pTestCell != pCell && pCell->custom_data["ability_to_phagocytose_infected_cell"]== 1 
+				&& pTestCell->phenotype.molecular.internalized_total_substrates[nV_external]>parameters.doubles("Infection_detection_threshold")/Vvoxel 
+				&& UniformRandom() < probability_of_phagocytosis ) // (Adrianne) macrophages that have been activated by T cells can phagocytose infected cells that contain at least 1 viral protein
 			{
 				{
 					// (Adrianne) obtain volume of cell to be ingested

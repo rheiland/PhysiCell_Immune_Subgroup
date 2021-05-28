@@ -22,6 +22,14 @@ void simple_internal_virus_response_model_setup( void )
 	internal_virus_response_model_info.cell_variables.push_back( "r_max" ); 
 	internal_virus_response_model_info.cell_variables.push_back( "max_apoptosis_half_max" ); 
 	internal_virus_response_model_info.cell_variables.push_back( "apoptosis_hill_power" ); 	
+	internal_virus_response_model_info.cell_variables.push_back( "VEn" ); 	
+	internal_virus_response_model_info.cell_variables.push_back( "infected_cell_chemokine_secretion_activated" );
+	internal_virus_response_model_info.cell_variables.push_back( "infected_cell_chemokine_secretion_rate" );
+	internal_virus_response_model_info.cell_variables.push_back( "activated_cytokine_secretion_rate" );
+	
+	
+	internal_virus_response_model_info.cell_variables.push_back( "VRel" ); 
+	internal_virus_response_model_info.cell_variables.push_back( "rRel" ); 	
 	
 		// register the submodel  
 	internal_virus_response_model_info.register_model();	
@@ -40,17 +48,11 @@ void influenza_internal_virus_response_model( Cell* pCell, Phenotype& phenotype,
 	return;
 }
 
-
-
-
-
-
 void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, double dt )
 {
 	static Cell_Definition* pCD = find_cell_definition( "lung epithelium" ); 
 	
 	// bookkeeping -- find microenvironment variables we need
-
 	static int nV_external = microenvironment.find_density_index( "virion" ); 
 	static int nA_external = microenvironment.find_density_index( "assembled virion" ); 
 	static int chemokine_index = microenvironment.find_density_index( "chemokine" );
@@ -59,7 +61,22 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 	double Vvoxel = microenvironment.mesh.voxels[1].volume;
 	
 	static int nV_internal = pCell->custom_data.find_variable_index( "virion" ); 
-	 
+	
+	// infected cells starts secreting based on VRel part of model
+	
+	if(pCell->custom_data["VRel"]>1e-16)
+	{
+		std::cout<<"VRel: "<<pCell->custom_data["VRel"]<<std::endl;
+		// secretion rate is equal to the rate virus unbinds from receptors plus secretion of new virions
+		pCell->phenotype.secretion.secretion_rates[nV_external] = 1;
+		//kDislo*VAttlo+kDishi*VAtthi+pCell->custom_data["rRel"]/Vvoxel;
+		
+		//flag for macrophages that cell has started secreting virions and can now be eaten
+		
+	}
+	
+	
+	// over the life time of infection there is a small probability of death
 	static int apoptosis_model_index = cell_defaults.phenotype.death.find_death_model_index( "apoptosis" );
 	
 	double R = pCell->phenotype.molecular.internalized_total_substrates[nV_external];
@@ -113,6 +130,10 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 		// (Adrianne) adding pro-inflammatory cytokine secretion by infected cells
 		phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = pCell->custom_data["activated_cytokine_secretion_rate"];
 	}
+		
+		
+	
+		
 		
 	return; 	
 }

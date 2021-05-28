@@ -11,9 +11,9 @@
 		</software>
 		<citation />
 		<current_time units="min">300.000000</current_time>
-		<current_runtime units="sec">53.457164</current_runtime>
-		<created>2021-05-27T04:33:01Z</created>
-		<last_modified>2021-05-27T04:33:01Z</last_modified>
+		<current_runtime units="sec">54.844971</current_runtime>
+		<created>2021-05-28T05:22:22Z</created>
+		<last_modified>2021-05-28T05:22:22Z</last_modified>
 	</metadata>
 	<microenvironment>
 		<domain name="microenvironment">
@@ -148,6 +148,34 @@
 							<label index="62" size="1">Bhi</label>
 							<label index="63" size="1">Blo</label>
 							<label index="64" size="1">VEn</label>
+							<label index="65" size="1">Vcytp</label>
+							<label index="66" size="1">Vnucp</label>
+							<label index="67" size="1">RC</label>
+							<label index="68" size="1">RV</label>
+							<label index="69" size="1">RCRdRp</label>
+							<label index="70" size="1">RVRdRp</label>
+							<label index="71" size="1">Cp</label>
+							<label index="72" size="1">VnucPM1</label>
+							<label index="73" size="1">VcytPM1</label>
+							<label index="74" size="1">RM1</label>
+							<label index="75" size="1">RM2</label>
+							<label index="76" size="1">RM3</label>
+							<label index="77" size="1">RM4</label>
+							<label index="78" size="1">RM5</label>
+							<label index="79" size="1">RM6</label>
+							<label index="80" size="1">RM7</label>
+							<label index="81" size="1">RM8</label>
+							<label index="82" size="1">PPB1</label>
+							<label index="83" size="1">PPB2</label>
+							<label index="84" size="1">PPA</label>
+							<label index="85" size="1">PRdRp</label>
+							<label index="86" size="1">PNP</label>
+							<label index="87" size="1">PM1</label>
+							<label index="88" size="1">PNEP</label>
+							<label index="89" size="1">PHA</label>
+							<label index="90" size="1">PNA</label>
+							<label index="91" size="1">PM2</label>
+							<label index="92" size="1">VRel</label>
 						</labels>
 						<filename>output00000005_cells_physicell.mat</filename>
 					</simplified_data>
