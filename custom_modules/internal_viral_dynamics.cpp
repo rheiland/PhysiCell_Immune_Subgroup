@@ -221,7 +221,7 @@ void intracellular_replication_model(  Cell* pCell, Phenotype& phenotype, double
 	pCell->custom_data["PPA"] += (kSynP/DRib*RM3-kRdRp*PPB1*PPB2*PPA)*dt;
 	pCell->custom_data["PRdRp"] += (kRdRp*PPB1*PPB2*PPA-kBindRdRp*PRdRp*(RV+RC)-(NPRdRp-8)*rRel)*dt;
 	pCell->custom_data["PNP"] += (kSynP/DRib*RM5-LV/NNucNP*kBindNP*PNP*(RVRdRp+RCRdRp)-(NPNP-8*LV/NNucNP)*rRel)*dt;
-	pCell->custom_data["PM1"] += (kSynP/DRib*(1-FSp17)*RM7-LV/NNucM1*kBindM1*PM1*Vnucp-(NPM1-8*LV/NNucM1))*dt;
+	pCell->custom_data["PM1"] += (kSynP/DRib*(1-FSp17)*RM7-LV/NNucM1*kBindM1*PM1*Vnucp-(NPM1-8*LV/NNucM1)*rRel)*dt;
 	pCell->custom_data["PNEP"] += (kSynP/DRib*FSp18*RM8-LV/NNucNEP*kExp*PNEP*VnucPM1-(NPNEP-8*LV/NNucNEP)*rRel)*dt;
 	pCell->custom_data["PHA"] += (kSynP/DRib*RM4-NPHA*rRel)*dt;
 	pCell->custom_data["PNA"] += (kSynP/DRib*RM6-NPNA*rRel)*dt;
