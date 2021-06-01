@@ -1,9 +1,9 @@
 function solt = model_simulator_RK(parameters,initial_conditions)
 
-solt = ode45(@modemode,[0 12*60],initial_conditions); 
+solt = ode45(@modemode,[0 9],initial_conditions); 
 
 function dydt = modemode(t,y,Z)	
-
+t
 % Variables
 VEx     = y(1);
 VAtthi  = y(2);
@@ -117,7 +117,6 @@ dVEn = kEn*(VAtthi+VAttlo)-(kFus+kDegVen)*VEn;
 
 % replication model
 rRel = kRel*VcytPM1*(PRdRp/(PRdRp+KVRel*NPRdRp))*(PHA/(PHA+KVRel*NPHA))*(PNP/(PNP+KVRel*NPNP))*(PNA/(PNA+KVRel*NPNA))*(PM1/(PM1+KVRel*NPM1))*(PM2/(PM2+KVRel*NPM2))*(PNEP/(PNEP+KVRel*NPNEP));
-	
 	
 dVcytp   = 8*kFus*VEn-kImp*Vcytp;
 dVnucp   = kImp*Vcytp+kBindNP*PNP*RVRdRp-(kBindM1*PM1+kDegRnp)*Vnucp;

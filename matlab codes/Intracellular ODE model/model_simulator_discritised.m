@@ -87,14 +87,11 @@ NPNP = parameters.NPNP;
 NPNA = parameters.NPNA;
 NPNEP = parameters.NPNEP;
 
-
 kAtthi = parameters.kAtthi;
 kAttlo = parameters.kAttlo;
 FFus = parameters.FFus;
 Btothi = parameters.Btothi;
 Btotlo = parameters.Btotlo;
-
-
 
 kDishi = kAtthi/kEqhi;
 kDislo = kAttlo/kEqlo;
@@ -115,7 +112,6 @@ VEn = VEn + (kEn*(VAtthi+VAttlo)-(kFus+kDegVen)*VEn)*dt;
 
 % replication model
 rRel = kRel*VcytPM1*(PRdRp/(PRdRp+KVRel*NPRdRp))*(PHA/(PHA+KVRel*NPHA))*(PNP/(PNP+KVRel*NPNP))*(PNA/(PNA+KVRel*NPNA))*(PM1/(PM1+KVRel*NPM1))*(PM2/(PM2+KVRel*NPM2))*(PNEP/(PNEP+KVRel*NPNEP));
-	
 	
 Vcytp   = Vcytp + (8*kFus*VEn-kImp*Vcytp)*dt;
 Vnucp   = Vnucp + (kImp*Vcytp+kBindNP*PNP*RVRdRp-(kBindM1*PM1+kDegRnp)*Vnucp)*dt;
