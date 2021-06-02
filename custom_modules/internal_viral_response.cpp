@@ -119,9 +119,8 @@ void simple_viral_secretion_model( Cell* pCell, Phenotype& phenotype, double dt 
 		static double kRel = parameters.doubles("kRel");
 		
 		pCell->custom_data["VRel"] += (kRel*Vnuc)*dt;
-		pCell->phenotype.secretion.secretion_rates[nV_external] = kDislo*VAttlo/Vvoxel+kDishi*VAtthi/Vvoxel+kRel*Vnuc/Vvoxel; // does this need a dt or virions in the first two terms?
+		pCell->phenotype.secretion.secretion_rates[nV_external] = kDislo*VAttlo+kDishi*VAtthi+kRel*Vnuc/Vvoxel; // does this need a dt or virions in the first two terms?
 			
-		
 	return;
 }
 

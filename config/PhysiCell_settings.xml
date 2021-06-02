@@ -419,7 +419,7 @@
 				</motility>
 				<secretion>
 					<substrate name="interferon 1">
-						<uptake_rate units="1/min">0.01</uptake_rate>
+						<uptake_rate units="1/min">0.0018</uptake_rate>
 					</substrate> 
 				</secretion>
 			</phenotype>
@@ -783,7 +783,7 @@
 				description="Half uptake virion density">0.125</rho_half>
 			
 			<IC_50_IFN type="double" units="cells" 
-				description="IFN half effect on viral efficacy">30</IC_50_IFN><!-- 30 -->
+				description="IFN half effect on viral efficacy">160</IC_50_IFN><!-- 30 -->
 			<IFN_secretion_rate type="double" units="cells" 
 				description="IFN secretion rate from infected cells">0.1</IFN_secretion_rate> <!-- -->
 			
@@ -857,7 +857,7 @@
 			<kImp type="double" units="1/min"
 				description="Nuclear import rate">0.1</kImp>
 			<kRel type="double" units="virions/min"
-				description="Virus release rate">6.1667e-5</kRel>
+				description="Virus release rate">6.1667e-2</kRel>
 			<gamnuc type="double" units="1/min"
 				description="RNA synthesis rate">0.0232</gamnuc>
 			<KVnuc type="double" units="virions"

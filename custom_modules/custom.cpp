@@ -222,15 +222,15 @@ void setup_tissue( void )
 		std::vector<double> position = {0,0,0};
 		int m = microenvironment.nearest_voxel_index( position ); 
 		microenvironment(m)[nV] += single_virion_density_change;//*50;
-		position[0] = 50;
+		position[0] = 100;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*50;
+		microenvironment(m)[nV] += single_virion_density_change*10;
 		position[0] = -50;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*50;
-		position[0] = -100;
+		microenvironment(m)[nV] += single_virion_density_change*10;
+		position[0] = -150;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*50;
+		microenvironment(m)[nV] += single_virion_density_change*10;
 	}
 	else if( parameters.bools( "initial_condition_large_tissue") == true )
 	{

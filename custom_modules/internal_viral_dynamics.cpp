@@ -64,7 +64,11 @@ void simple_intracellular_replication_model(  Cell* pCell, Phenotype& phenotype,
 	static double KVnuc = parameters.doubles("KVnuc");
 		static double kRel = parameters.doubles("kRel");
 	
-	pCell->custom_data["Vnuc"] += (kFus*VEn+gamnuc*Vnuc*(1-Vnuc/KVnuc)-kRel*Vnuc)*dt;
-		
+	//std::cout<<VEn<<" "<<Vnuc<<std::endl;
+	if(pCell->custom_data["antiviral_state"]<0.5) // cell isn't in an antiviral state
+	{	
+		pCell->custom_data["Vnuc"] += (kFus*VEn+gamnuc*Vnuc*(1-Vnuc/KVnuc))*dt;
+	}
+	
 	return;	
 }

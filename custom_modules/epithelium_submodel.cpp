@@ -52,14 +52,16 @@ void epithelium_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 	double IFN_prob = IFN_internal/(IC_50_IFN+IFN_internal);
 	
 	double prob_prob = UniformRandom();
-	if( prob_prob<IFN_prob && pCell->custom_data["antiviral_state"]<1)
+	if(pCell->custom_data["antiviral_state_timer"]<PhysiCell_globals.current_time && prob_prob>IFN_prob )
+	{pCell->custom_data["antiviral_state"] = 0;}
+	else if( prob_prob<IFN_prob && pCell->custom_data["antiviral_state"]<1 && pCell->custom_data["Vnuc"]<parameters.doubles("Infection_detection_threshold"))
 	{
 		// cell enters antiviral state
 		//std::cout<<"Cell enters antiviral state "<<prob_prob<<" "<<IFN_prob<<std::endl;
 		pCell->custom_data["antiviral_state"] = 1;
 		
 		// start the counter for the antiviral state - only lasts for 24 hours
-		pCell->custom_data["antiviral_state_timer"] = PhysiCell_globals.current_time+24*60*20;
+		pCell->custom_data["antiviral_state_timer"] = PhysiCell_globals.current_time+24*60*2;
 	}
 	//else if( pCell->custom_data["antiviral_state"]>0.5 &&  pCell->custom_data["antiviral_state_timer"]<PhysiCell_globals.current_time)
 	//{

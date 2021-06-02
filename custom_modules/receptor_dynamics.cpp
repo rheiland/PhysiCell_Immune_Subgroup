@@ -59,19 +59,20 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	double IC_50_IFN = parameters.doubles("IC_50_IFN");
 
 	
-	if(pCell->custom_data["antiviral_state"]<0.5) // cell isn't in an antiviral state
-	{		
+		
 		// Determine the binding/unbinding rates from the model of Heldt and Laske to determine cell uptake/secretion rates
 		
 		// drawing variables for uptake from Heldt and Laske models 
 		double VEx = pCell->nearest_density_vector()[nV_external]*Vvoxel;//pCell->custom_data["VEx"];
-		if(VEx<0)
+		if(VEx<1)
 		{VEx = 0;}
+
 		double VAtthi = pCell->custom_data["VAtthi"];
 		double VAttlo = pCell->custom_data["VAttlo"];
 		double Bhi = pCell->custom_data["Bhi"];
 		double Blo = pCell->custom_data["Blo"];
 		double VEn = pCell->custom_data["VEn"];
+		double Vnuc = pCell->custom_data["Vnuc"];
 		
 		// drawing parameters for uptake from Heldt and Laske models
 		static double kAtthi = parameters.doubles("kAtthi");
@@ -82,23 +83,31 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 		static double Btothi = parameters.doubles("Btothi");
 		static double Btotlo = parameters.doubles("Btotlo");
 		
+		static double kRel = parameters.doubles("kRel");
 		static double FFus = parameters.doubles("FFus");
 		static double kFus = parameters.doubles("kFus");
 		static double kDegVen = (1-FFus)/FFus*kFus;
-			
+
 		// evaluating Heldt and Laske's ODE models
 		pCell->custom_data["VAtthi"] += (kAtthi*Bhi*VEx-kDishi*VAtthi-kEn*VAtthi)*dt;
 		pCell->custom_data["VAttlo"] += (kAttlo*Blo*VEx-kDislo*VAttlo-kEn*VAttlo)*dt;
 		pCell->custom_data["Bhi"] += Btothi-VAtthi;
 		pCell->custom_data["Blo"] += Btotlo-VAttlo;
 		pCell->custom_data["VEn"] += (kEn*(VAtthi+VAttlo)-(kFus-kDegVen)*VEn)*dt;
-					
-					
-		pCell->phenotype.secretion.secretion_rates[nV_external] = (kDislo*VAttlo/Vvoxel+kDishi*VAtthi/Vvoxel);
-		pCell->phenotype.secretion.uptake_rates[nV_external] = (kAtthi*Bhi+kAttlo*Blo);
-			
-		}
+										
+										
+		pCell->custom_data["VRel"] += (kRel*Vnuc)*dt;
+		pCell->phenotype.secretion.secretion_rates[nV_external] = kDislo*VAttlo+kDishi*VAtthi+kRel*Vnuc/Vvoxel; // does this need a dt or virions in the first two terms?
 		
+		//pCell->phenotype.secretion.secretion_rates[nV_external] = (kDislo*VAttlo+kDishi*VAtthi);
+		
+		if(pCell->custom_data["antiviral_state"]<0.5) // cell isn't in an antiviral state
+		{pCell->phenotype.secretion.uptake_rates[nV_external] = 0;}
+		else if(VEx<1)
+		{pCell->phenotype.secretion.uptake_rates[nV_external] = 0;}
+		else
+		{pCell->phenotype.secretion.uptake_rates[nV_external] = (kAtthi*Bhi+kAttlo*Blo);}
+	
 	return;
 }
 

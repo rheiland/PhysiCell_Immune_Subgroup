@@ -780,7 +780,7 @@ void macrophage_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 				return; 
 			}
 			else if( pTestCell != pCell && pCell->custom_data["ability_to_phagocytose_infected_cell"]== 1 
-				&& pTestCell->phenotype.molecular.internalized_total_substrates[nV_external]>parameters.doubles("Infection_detection_threshold")/Vvoxel 
+				&& pTestCell->custom_data["Vnuc"]>parameters.doubles("Infection_detection_threshold")/Vvoxel 
 				&& UniformRandom() < probability_of_phagocytosis ) // (Adrianne) macrophages that have been activated by T cells can phagocytose infected cells that contain at least 1 viral protein
 			{
 				{
@@ -906,7 +906,7 @@ void neutrophil_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 		if( pTestCell != pCell && pTestCell->phenotype.death.dead == true && 
 			UniformRandom() < probability_of_phagocytosis && 
 			pTestCell->phenotype.volume.total < max_phagocytosis_volume &&
-			pTestCell->phenotype.molecular.internalized_total_substrates[nV_external]>parameters.doubles("Infection_detection_threshold") )
+			pTestCell->custom_data["Vnuc"]>parameters.doubles("Infection_detection_threshold") )
 		{
 			// #pragma omp critical(neutrophil_eat)
 			{
@@ -1051,7 +1051,7 @@ void DC_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 			{
 				pTestCell = neighbors[n]; 
 				// if it is not me and the target is dead 
-				if( pTestCell != pCell && pTestCell->phenotype.death.dead == false && pTestCell->phenotype.molecular.internalized_total_substrates[nV_external]>parameters.doubles("infection_detection_threshold") )
+				if( pTestCell != pCell && pTestCell->phenotype.death.dead == false && pTestCell->custom_data["Vnuc"]>parameters.doubles("infection_detection_threshold") )
 				{			
 					pCell->custom_data["activated_immune_cell"] = 1.0; 
 					
@@ -1305,7 +1305,7 @@ bool attempt_immune_cell_attachment( Cell* pAttacker, Cell* pTarget , double dt 
 	static int nV_external = microenvironment.find_density_index("virion");
 	//std::cout<<"attempt attachment"<<std::endl;
 	// if the target is not infected, give up 
-	if( pTarget->phenotype.molecular.internalized_total_substrates[nV_external]< pAttacker->custom_data[ "TCell_detection" ] )
+	if( pTarget->custom_data["Vnuc"]< pAttacker->custom_data[ "TCell_detection" ] )
 	{ return false; }
 		
 	// if the target cell is dead, give up 
