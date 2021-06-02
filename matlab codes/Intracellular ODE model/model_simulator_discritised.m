@@ -113,7 +113,7 @@ VEn = VEn + (kEn*(VAtthi+VAttlo)-(kFus+kDegVen)*VEn)*dt;
 % replication model
 rRel = kRel*VcytPM1*(PRdRp/(PRdRp+KVRel*NPRdRp))*(PHA/(PHA+KVRel*NPHA))*(PNP/(PNP+KVRel*NPNP))*(PNA/(PNA+KVRel*NPNA))*(PM1/(PM1+KVRel*NPM1))*(PM2/(PM2+KVRel*NPM2))*(PNEP/(PNEP+KVRel*NPNEP));
 	
-Vcytp   = Vcytp + (8*kFus*VEn-kImp*Vcytp)*dt;
+Vcytp   = 0;% Vcytp + (8*kFus*VEn-kImp*Vcytp)*dt;
 Vnucp   = Vnucp + (kImp*Vcytp+kBindNP*PNP*RVRdRp-(kBindM1*PM1+kDegRnp)*Vnucp)*dt;
 RC      = RC + (kSynC*Vnucp-kBindRdRp*PRdRp*RC-kDegR*RC)*dt;
 RV      = RV +(kSynV*Cp-kBindRdRp*PRdRp*RV-kDegR*RV)*dt;	

@@ -11,9 +11,9 @@
 		</software>
 		<citation />
 		<current_time units="min">0.000000</current_time>
-		<current_runtime units="sec">0.386308</current_runtime>
-		<created>2021-05-27T04:32:07Z</created>
-		<last_modified>2021-05-27T04:32:07Z</last_modified>
+		<current_runtime units="sec">1.057034</current_runtime>
+		<created>2021-06-02T05:25:25Z</created>
+		<last_modified>2021-06-02T05:25:25Z</last_modified>
 	</metadata>
 	<microenvironment>
 		<domain name="microenvironment">
@@ -27,49 +27,42 @@
 				</voxels>
 			</mesh>
 			<variables>
-				<variable name="virion" units="virion/micron^3" ID="0">
+				<variable name="virion" units="copies/micron^3" ID="0">
 					<physical_parameter_set>
 						<conditions />
 						<diffusion_coefficient units="micron^2/min">60.000000</diffusion_coefficient>
 						<decay_rate units="1/min">0.003900</decay_rate>
 					</physical_parameter_set>
 				</variable>
-				<variable name="assembled virion" units="virion/micron^3" ID="1">
-					<physical_parameter_set>
-						<conditions />
-						<diffusion_coefficient units="micron^2/min">60.000000</diffusion_coefficient>
-						<decay_rate units="1/min">0.003900</decay_rate>
-					</physical_parameter_set>
-				</variable>
-				<variable name="interferon 1" units="mol/micron^3" ID="2">
+				<variable name="interferon 1" units="mol/micron^3" ID="1">
 					<physical_parameter_set>
 						<conditions />
 						<diffusion_coefficient units="micron^2/min">750.000000</diffusion_coefficient>
 						<decay_rate units="1/min">0.005800</decay_rate>
 					</physical_parameter_set>
 				</variable>
-				<variable name="pro-inflammatory cytokine" units="mol/micron^3" ID="3">
+				<variable name="pro-inflammatory cytokine" units="mol/micron^3" ID="2">
 					<physical_parameter_set>
 						<conditions />
 						<diffusion_coefficient units="micron^2/min">555.560000</diffusion_coefficient>
 						<decay_rate units="1/min">0.010200</decay_rate>
 					</physical_parameter_set>
 				</variable>
-				<variable name="chemokine" units="mol/micron^3" ID="4">
+				<variable name="chemokine" units="mol/micron^3" ID="3">
 					<physical_parameter_set>
 						<conditions />
 						<diffusion_coefficient units="micron^2/min">555.560000</diffusion_coefficient>
 						<decay_rate units="1/min">0.010200</decay_rate>
 					</physical_parameter_set>
 				</variable>
-				<variable name="debris" units="mol/micron^3" ID="5">
+				<variable name="debris" units="mol/micron^3" ID="4">
 					<physical_parameter_set>
 						<conditions />
 						<diffusion_coefficient units="micron^2/min">555.560000</diffusion_coefficient>
 						<decay_rate units="1/min">0.010200</decay_rate>
 					</physical_parameter_set>
 				</variable>
-				<variable name="ROS" units="mol/micron^3" ID="6">
+				<variable name="ROS" units="mol/micron^3" ID="5">
 					<physical_parameter_set>
 						<conditions />
 						<diffusion_coefficient units="micron^2/min">2220.000000</diffusion_coefficient>
@@ -137,17 +130,18 @@
 							<label index="51" size="1">activated_speed</label>
 							<label index="52" size="1">activated_cytokine_secretion_rate</label>
 							<label index="53" size="1">DC_leaving_not_dying</label>
-							<label index="54" size="1">Virions_internalized</label>
-							<label index="55" size="1">activated_immune_cell</label>
-							<label index="56" size="1">antiviral_state</label>
-							<label index="57" size="1">antiviral_state_timer</label>
-							<label index="58" size="1">displacement_stor</label>
-							<label index="59" size="1">VEx</label>
-							<label index="60" size="1">VAtthi</label>
-							<label index="61" size="1">VAttlo</label>
-							<label index="62" size="1">Bhi</label>
-							<label index="63" size="1">Blo</label>
-							<label index="64" size="1">VEn</label>
+							<label index="54" size="1">activated_immune_cell</label>
+							<label index="55" size="1">antiviral_state</label>
+							<label index="56" size="1">antiviral_state_timer</label>
+							<label index="57" size="1">displacement_stor</label>
+							<label index="58" size="1">VEx</label>
+							<label index="59" size="1">VAtthi</label>
+							<label index="60" size="1">VAttlo</label>
+							<label index="61" size="1">Bhi</label>
+							<label index="62" size="1">Blo</label>
+							<label index="63" size="1">VEn</label>
+							<label index="64" size="1">Vnuc</label>
+							<label index="65" size="1">VRel</label>
 						</labels>
 						<filename>initial_cells_physicell.mat</filename>
 					</simplified_data>

@@ -1,18 +1,18 @@
 % Creating movie of substrates
 addpath('../output')
 var=1;
-timetotal =240;
+timetotal =30;
 A = 'output0000000';
 A2 = 'output000000';
 A3 = 'output00000'; 
 A4 = 'output0000'; 
 B = '.xml';
 virus_index = 1;
-IFN_index = 3;
-pro_cyto_index = 4;
-chemokine_index = 5;
-debris_index = 6;
-ROS_index = 7;
+IFN_index = 2;
+pro_cyto_index = 3;
+chemokine_index = 4;
+debris_index = 5;
+ROS_index = 6;
 
 
 v = VideoWriter('sub111.avi')
@@ -108,17 +108,17 @@ for tcount = 2:timetotal
      MCDS.metadata.time_units ) ); 
     
  virus_index = 1;
-IFN_index = 3;
-pro_cyto_index = 4;
-chemokine_index = 5;
-debris_index = 6;
-ROS_index = 7;
+IFN_index = 2;
+pro_cyto_index = 3;
+chemokine_index = 4;
+debris_index = 5;
+ROS_index = 6;
  	 virus(tcount) = sum(sum(MCDS.continuum_variables(virus_index).data(:,:,k)));
  	 IFN(tcount) = sum(sum(MCDS.continuum_variables(IFN_index).data(:,:,k)));
  	 chemokine(tcount) = sum(sum(MCDS.continuum_variables(chemokine_index).data(:,:,k)));
  	 pro_cyto(tcount) = sum(sum(MCDS.continuum_variables(pro_cyto_index).data(:,:,k)));
  	 debris(tcount) = sum(sum(MCDS.continuum_variables(debris_index).data(:,:,k)));
- 	 ROS(tcount) = sum(sum(MCDS.continuum_variables(ROS_index).data(:,:,k)));
+ 	ROS(tcount) = sum(sum(MCDS.continuum_variables(ROS_index).data(:,:,k)));
  
     locs = find( MCDS.discrete_cells.metadata.type == 1); %vein cells
     number_GBM_cells(tcount-1) = length(locs);

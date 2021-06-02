@@ -633,7 +633,7 @@ void macrophage_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 		pCell->functions.update_phenotype = NULL;
 		pCell->functions.custom_cell_rule = NULL; 
 
-		phenotype.secretion.secretion_rates[debris_index] = pCell->custom_data["debris_secretion_rate"]; 
+	//	phenotype.secretion.secretion_rates[debris_index] = pCell->custom_data["debris_secretion_rate"]; 
 		return; 
 	}
 
@@ -954,18 +954,6 @@ void neutrophil_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 void neutrophil_mechanics( Cell* pCell, Phenotype& phenotype, double dt )
 {
 	
-	//std::cout<<"neut mechanics"<<std::endl;
-	static int debris_index = microenvironment.find_density_index( "debris");
-
-	if( phenotype.death.dead == true )
-	{
-		pCell->functions.update_phenotype = NULL;
-		pCell->functions.custom_cell_rule = NULL; 
-
-		phenotype.secretion.secretion_rates[debris_index] = pCell->custom_data["debris_secretion_rate"]; 
-		return; 
-	}
-
 	// bounds check 
 	if( check_for_out_of_bounds( pCell , 10.0 ) )
 	{ 
@@ -1088,6 +1076,7 @@ void DC_mechanics( Cell* pCell, Phenotype& phenotype, double dt )
 	
 	static int debris_index = microenvironment.find_density_index( "debris");
 
+	
 	if( phenotype.death.dead == true )
 	{
 		pCell->functions.update_phenotype = NULL;

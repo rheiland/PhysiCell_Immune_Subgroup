@@ -15,6 +15,6 @@ void simple_internal_virus_model_setup( void );
 
 void simple_internal_virus_model( Cell* pCell, Phenotype& phenotype, double dt );
 
-void intracellular_replication_model(  Cell* pCell, Phenotype& phenotype, double dt );
+void simple_intracellular_replication_model(  Cell* pCell, Phenotype& phenotype, double dt );
 
 #endif 

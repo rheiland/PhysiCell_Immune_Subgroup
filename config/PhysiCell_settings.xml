@@ -123,7 +123,7 @@
 	</save>
 	
 	<microenvironment_setup>
-		<variable name="virion" units="virion/micron^3" ID="0">
+		<variable name="virion" units="copies/micron^3" ID="0">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">60</diffusion_coefficient> <!-- 10 --> 
 				<decay_rate units="1/min">0.0039</decay_rate>  
@@ -132,16 +132,7 @@
 			<Dirichlet_boundary_condition units="virion/micron^3" enabled="false">0</Dirichlet_boundary_condition>
 		</variable>
 
-		<variable name="assembled virion" units="virion/micron^3" ID="1">
-			<physical_parameter_set>
-				<diffusion_coefficient units="micron^2/min">60</diffusion_coefficient> <!-- 10 --> 
-				<decay_rate units="1/min">0.0039</decay_rate>  
-			</physical_parameter_set>
-			<initial_condition units="virion/micron^3">0</initial_condition>
-			<Dirichlet_boundary_condition units="virion/micron^3" enabled="false">0</Dirichlet_boundary_condition>
-		</variable>
-
-		<variable name="interferon 1" units="mol/micron^3" ID="2">
+		<variable name="interferon 1" units="mol/micron^3" ID="1">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">750</diffusion_coefficient>
 				<decay_rate units="1/min">0.0058</decay_rate>  
@@ -150,7 +141,7 @@
 			<Dirichlet_boundary_condition units="mol/micron^3" enabled="false">0</Dirichlet_boundary_condition>
 		</variable>
 
-		<variable name="pro-inflammatory cytokine" units="mol/micron^3" ID="3">
+		<variable name="pro-inflammatory cytokine" units="mol/micron^3" ID="2">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">555.56</diffusion_coefficient>
 				<decay_rate units="1/min">1.02e-2</decay_rate>  
@@ -159,7 +150,7 @@
 			<Dirichlet_boundary_condition units="mol/micron^3" enabled="false">0</Dirichlet_boundary_condition>
 		</variable>
 
-		<variable name="chemokine" units="mol/micron^3" ID="4">
+		<variable name="chemokine" units="mol/micron^3" ID="3">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">555.56</diffusion_coefficient>
 				<decay_rate units="1/min">1.02e-2</decay_rate>  
@@ -168,7 +159,7 @@
 			<Dirichlet_boundary_condition units="mol/micron^3" enabled="false">0</Dirichlet_boundary_condition>
 		</variable>
 		
-		<variable name="debris" units="mol/micron^3" ID="5">
+		<variable name="debris" units="mol/micron^3" ID="4">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">555.56</diffusion_coefficient>
 				<decay_rate units="1/min">1.02e-2</decay_rate>  
@@ -177,7 +168,7 @@
 			<Dirichlet_boundary_condition units="mol/micron^3" enabled="false">0</Dirichlet_boundary_condition>
 		</variable>
 		
-		<variable name="ROS" units="mol/micron^3" ID="6">
+		<variable name="ROS" units="mol/micron^3" ID="5">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">2220</diffusion_coefficient>  <!-- reduce the diffusion -->
 				<decay_rate units="1/min">60</decay_rate>  
@@ -206,9 +197,8 @@
 				<cycle code="6" name="flow_cytometry_separated_cycle_model">  
 					<!-- using higher than normal significant digits to match divisions in default code -->
 					<phase_transition_rates units="1/min"> 
-						<!-- G0/G1 to S -->
+						<!-- G0/G1 to S : set to zero as epithelial cells do not proliferate-->
 						<rate start_index="0" end_index="1" fixed_duration="false">0</rate>
-						<!-- 0.00334672 --> 
 						<!-- S to G2 -->
 						<rate start_index="1" end_index="2" fixed_duration="true">0.00208333</rate>
 						<!-- G2 to M -->
@@ -278,7 +268,7 @@
 				</mechanics>
 				
 				<motility>  
-					<speed units="micron/min">4</speed>
+					<speed units="micron/min">0</speed>
 					<persistence_time units="min">5</persistence_time>
 					<migration_bias units="dimensionless">0.7</migration_bias>
 					
@@ -382,8 +372,6 @@
 
 				<DC_leaving_not_dying units="dimensionless" type="double" 
 					description="used internally to track activation state">0.0</DC_leaving_not_dying>
-				<Virions_internalized units="virions" type="double"
-					description="tracking internalized virus">0.0</Virions_internalized>
 				<activated_immune_cell units="dimensionless" type="double"
 					description="flag for whether immune cell is activated or not">0.0</activated_immune_cell>
 				<antiviral_state units="dimensionless" type="double"
@@ -396,80 +384,19 @@
 				
 				<!-- Viral uptake model variables -->
 				
-				<VEx units="External virus" type="double"
-					description="displacement">0.0</VEx>
-				<VAtthi units="Attached virus" type="double"
-					description="displacement">0.0</VAtthi>
-				<VAttlo units="Attached virus" type="double"
-					description="displacement">0.0</VAttlo>
-				<Bhi units="Receptors" type="double"
-					description="displacement">0.0</Bhi>
-				<Blo units="Receptors" type="double"
-					description="displacement">0.0</Blo>
-				<VEn units="Receptors" type="double"
-					description="displacement">0.0</VEn>
+				<VEx units="virions" type="double" description="External virus">0.0</VEx>
+				<VAtthi units="Virus attached to high-affinity receptors" type="virions" description="displacement">0.0</VAtthi>
+				<VAttlo units="virions" type="double" description="Virus attached to low-affinity receptors">0.0</VAttlo>
+				<Bhi units="sites" type="double" description="High-affinity receptor sites">0.0</Bhi>
+				<Blo units="sites" type="double" description="Low-affinity receptor sites">0.0</Blo>
+				<VEn units="virions" type="double" description="Endocytosed virus">0.0</VEn>
 					
 					
 				<!-- Viral replication model variables -->
-				<Vcytp units="Receptors" type="double"
-					description="displacement">0.0</Vcytp>
-				<Vnucp units="Receptors" type="double"
-					description="displacement">0.0</Vnucp>
-				<RC units="Receptors" type="double"
-					description="displacement">0.0</RC>
-				<RV units="Receptors" type="double"
-					description="displacement">0.0</RV>
-				<RCRdRp units="Receptors" type="double"
-					description="displacement">0.0</RCRdRp>
-				<RVRdRp units="Receptors" type="double"
-					description="displacement">0.0</RVRdRp>
-				<Cp units="Receptors" type="double"
-					description="displacement">0.0</Cp>
-				<VnucPM1 units="Receptors" type="double"
-					description="displacement">0.0</VnucPM1>
-				<VcytPM1 units="Receptors" type="double"
-					description="displacement">0.0</VcytPM1>
-				<RM1 units="Receptors" type="double"
-					description="displacement">0.0</RM1>
-				<RM2 units="Receptors" type="double"
-					description="displacement">0.0</RM2>
-				<RM3 units="Receptors" type="double"
-					description="displacement">0.0</RM3>
-				<RM4 units="Receptors" type="double"
-					description="displacement">0.0</RM4>
-				<RM5 units="Receptors" type="double"
-					description="displacement">0.0</RM5>
-				<RM6 units="Receptors" type="double"
-					description="displacement">0.0</RM6>
-				<RM7 units="Receptors" type="double"
-					description="displacement">0.0</RM7>
-				<RM8 units="Receptors" type="double"
-					description="displacement">0.0</RM8>
-				<PPB1 units="Receptors" type="double"
-					description="displacement">0.0</PPB1>
-				<PPB2 units="Receptors" type="double"
-					description="displacement">0.0</PPB2>
-				<PPA units="Receptors" type="double"
-					description="displacement">0.0</PPA>
-				<PRdRp units="Receptors" type="double"
-					description="displacement">0.0</PRdRp>
-				<PNP units="Receptors" type="double"
-					description="displacement">0.0</PNP>
-				<PM1 units="Receptors" type="double"
-					description="displacement">0.0</PM1>
-				<PNEP units="Receptors" type="double"
-					description="displacement">0.0</PNEP>
-				<PHA units="Receptors" type="double"
-					description="displacement">0.0</PHA>
-				<PNA units="Receptors" type="double"
-					description="displacement">0.0</PNA>
-				<PM2 units="Receptors" type="double"
-					description="displacement">0.0</PM2>
-				<VRel units="Receptors" type="double"
-					description="displacement">0.0</VRel>
-						
-				<rRel units="Receptors" type="double"
-					description="displacement">0.0</rRel>
+				<Vnuc units="virions" type="double"
+					description="RNA in the nucleus">0.0</Vnuc>
+				<VRel units="virions" type="double"
+					description="Released virus">0.0</VRel>
 			
 			</custom_data>
 		</cell_definition>
@@ -692,7 +619,7 @@
 				
 				<motility>  
 					<speed units="micron/min">2</speed>
-					<migration_bias>0.7</migration_bias>  
+					<migration_bias>0.4</migration_bias>  
 					<persistence_time>5</persistence_time>
 					<options>
 						<enabled>true</enabled>
@@ -781,39 +708,31 @@
 				description="min concentration to attract CD8">0.2</CD8_recruitment_min_signal> <!--0.1 debug -->
 			<CD8_recruitment_saturation_signal type="double" units="substrate/micron^3"
 				description="saturating concentration to attract CD8">0.4</CD8_recruitment_saturation_signal> <!-- 0.3 debug -->
-				
-				
-				
 			<macrophage_max_recruitment_rate type="double" units="cells/min/micron^3"
 				description="max macrophage recruitment rate (for saturated signal)">4e-9</macrophage_max_recruitment_rate> <!-- 4e-9 debug -->
 			<macrophage_recruitment_min_signal type="double" units="substrate/micron^3"
 				description="min concentration to attract macrophages">0.1</macrophage_recruitment_min_signal> <!--0.1 debug -->
 			<macrophage_recruitment_saturation_signal type="double" units="substrate/micron^3"
 				description="saturating concentration to attract macrophages">0.3</macrophage_recruitment_saturation_signal> <!-- 0.3 debug -->
-
 			<neutrophil_max_recruitment_rate type="double" units="cells/min/micron^3"
 				description="max neutrophil recruitment rate (for saturated signal)">4e-9</neutrophil_max_recruitment_rate> <!-- 4e-9 debug -->
 			<neutrophil_recruitment_min_signal type="double" units="substrate/micron^3"
 				description="min concentration to attract neutrophils">0.1</neutrophil_recruitment_min_signal> <!--0.1 debug -->
 			<neutrophil_recruitment_saturation_signal type="double" units="substrate/micron^3"
 				description="saturating concentration to attract neutrophils">0.3</neutrophil_recruitment_saturation_signal> <!-- 0.3 debug -->
-			
-		<div_initialization type="divider" description="---Initialization Options--"/>
+			<div_initialization type="divider" description="---Initialization Options--"/>
 			<multiplicity_of_infection type="double" units="none" 
 				description="multiplicity of infection: virions/cells at t=0">1</multiplicity_of_infection> <!-- 0.01 debug -->
 			<use_single_infected_cell type="bool" units="none" 
 				description="Infect center cell with one virion (overrides MOI)">false</use_single_infected_cell>
-			<use_small_tissue type="bool" units="none" 
-				description="Infect center cell with one virion (overrides MOI)">true</use_small_tissue>
-			<use_multiple_initial_injection_points type="bool" units="none" 
-				description="Infect center cell with one virion (overrides MOI)">false</use_multiple_initial_injection_points>
+			<initial_condition_small_tissue type="bool" units="none" 
+				description="Infect center cell with one virion (overrides MOI)">true</initial_condition_small_tissue>
+			<initial_condition_large_tissue type="bool" units="none" 
+				description="Infect center cell with one virion (overrides MOI)">false</initial_condition_large_tissue>
 			<Number_of_virion_arrival_points type="int" units="virions"
 				description="Number of places viruses arrive in the lungs">5</Number_of_virion_arrival_points>
-				
 			<virus_fraction_released_at_death type="double" units="none" 
-					description="fraction of internal virus released at cell death">1</virus_fraction_released_at_death>
-					
-			
+					description="fraction of internal virus released at cell death">0</virus_fraction_released_at_death>
 			<number_of_CD8_Tcells type="int" units="none" 
 				description="initial number of CD8 T cells in tissue">0</number_of_CD8_Tcells>
 			<number_of_macrophages type="int" units="none" 
@@ -846,7 +765,7 @@
 				description="percentage of tissue sitting above blood vessels">8.8</perecentage_tissue_vascularized>			
 
 		<div_colors type="divider" description="---Cell Color Options--"/>
-			<color_variable type="string" description="color cells based on this variable">assembled_virion</color_variable>
+			<color_variable type="string" description="color cells based on this variable">Vnuc</color_variable>
 			
 			<epithelial_opacity type="double" description="opacity of epithelial cells">0.65</epithelial_opacity>
 			<non_epithelial_opacity type="double" description="opacity of non-epithelial cells">0.8</non_epithelial_opacity>
@@ -858,17 +777,13 @@
 			
 			<gamma type="double" units="cells" 
 				description="replication rate of virion DNA">0.05</gamma><!-- 0.05 -->
-			<m_half type="double" units="cells" 
-				description="half-effect on virus uptake">10</m_half>
 			<u_Evirus type="double" units="cells" 
 				description="epithelial cell uptake rate of virus">0.0001</u_Evirus>
 			<rho_half type="double" units="cells" 
 				description="Half uptake virion density">0.125</rho_half>
-			<rho_max type="double" units="cells" 
-				description="Half uptake virion density">0.0125</rho_max>
 			
 			<IC_50_IFN type="double" units="cells" 
-				description="IFN half effect on viral efficacy">60</IC_50_IFN><!-- 30 -->
+				description="IFN half effect on viral efficacy">30</IC_50_IFN><!-- 30 -->
 			<IFN_secretion_rate type="double" units="cells" 
 				description="IFN secretion rate from infected cells">0.1</IFN_secretion_rate> <!-- -->
 			
@@ -911,115 +826,42 @@
 				description="DC color">deeppink</activated_DC_color>
 				
 			<virus_fraction_released_after_apoptosis type="double" units="none"
-				description="Fraction of virus released after CD8 T cell apoptosis">0.5</virus_fraction_released_after_apoptosis>
+				description="Fraction of virus released after CD8 T cell apoptosis">0</virus_fraction_released_after_apoptosis>
 			<carrying_capacity type="double" units="cells"
 				description="Number of cells at homeostasis">2800</carrying_capacity>
 			<pressure_threshold type="double" units="dimensionless"
 				description="pressure_threshold">6.98</pressure_threshold>
 				
 				
-			<kAtthi type="double" units="dimensionless"
-				description="Attachment rate">0.0013</kAtthi>
-			<kAttlo type="double" units="dimensionless"
-				description="Attachment rate">7.5833e-4</kAttlo>
-			<kEqhi type="double" units="dimensionless"
-				description="Attachment rate">1.13e-2</kEqhi>
-			<kEqlo type="double" units="dimensionless"
-				description="Attachment rate">8.33e-5</kEqlo>
-			<kEn type="double" units="dimensionless"
-				description="Attachment rate">0.08</kEn>
-			<Btothi type="double" units="dimensionless"
-				description="Attachment rate">150</Btothi>
-			<Btotlo type="double" units="dimensionless"
-				description="Attachment rate">1000</Btotlo>
+			<kAtthi type="double" units="1/site/min"
+				description="Attachment to high-affinity binding sites">0.0013</kAtthi>
+			<kAttlo type="double" units="1/site/min"
+				description="Attachement to low-affinity binding sites">7.5833e-6</kAttlo>
+			<kEqhi type="double" units="1/site"
+				description="Equilibrium constant of high-affinity sites">1.13e-2</kEqhi>
+			<kEqlo type="double" units="1/site"
+				description="Equilibrium constant of low-affinity sites">8.33e-5</kEqlo>
+			<kEn type="double" units="1/min"
+				description="Endocytosis rate">0.08</kEn>
+			<Btothi type="double" units="sites"
+				description="No. of high-affinity binding sites">150</Btothi>
+			<Btotlo type="double" units="sites"
+				description="No. of low-affinity binding sites">1000</Btotlo>
 			<FFus type="double" units="dimensionless"
-				description="Attachment rate">0.51</FFus>
-			<kFus type="double" units="dimensionless"
-				description="Attachment rate">0.0535</kFus>
+				description="Fraction of fusion-competent virions">0.51</FFus>
+			<kFus type="double" units="1/min"
+				description="Fusion rate with endosomes">0.0535</kFus>
 		
 			
 				<!-- Viral replication model variables -->
-			<DRib type="double" units="dimensionless"
-				description="Attachment rate">160</DRib>
-			<FSp17 type="double" units="dimensionless"
-				description="Attachment rate">0.02</FSp17>
-			<FSp18 type="double" units="dimensionless"
-				description="Attachment rate">0.125</FSp18>
-			<kImp type="double" units="dimensionless"
-				description="Attachment rate">0.1</kImp>
-			<kExp type="double" units="dimensionless"
-				description="Attachment rate">1.6667e-8</kExp>
-			<kRdRp type="double" units="dimensionless"
-				description="Attachment rate">0.0167</kRdRp>
-			<kRel type="double" units="dimensionless"
-				description="Attachment rate">6.1667e-5</kRel>
-			<kBindNP type="double" units="dimensionless"
-				description="Attachment rate">5.0167e-6</kBindNP>
-			<kBindM1 type="double" units="dimensionless"
-				description="Attachment rate">2.3167e-8</kBindM1>
-			<kBindRdRp type="double" units="dimensionless"
-				description="Attachment rate">0.01675</kBindRdRp>
-			<kDegRnp type="double" units="dimensionless"
-				description="Attachment rate">0.0015</kDegRnp>
-			<kDegR type="double" units="dimensionless"
-				description="Attachment rate">0.606</kDegR>
-			<kDegRRdRp type="double" units="dimensionless"
-				description="Attachment rate">0.0708</kDegRRdRp>
-			<kDegM type="double" units="dimensionless"
-				description="Attachment rate">0.0055</kDegM>
-			<kSynC type="double" units="dimensionless"
-				description="Attachment rate">0.023</kSynC>
-			<kSynV type="double" units="dimensionless"
-				description="Attachment rate">0.231</kSynV>
-			<kSynM type="double" units="dimensionless"
-				description="Attachment rate">4.1667e-7</kSynM>
-			<kSynP type="double" units="dimensionless"
-				description="Attachment rate">1080</kSynP>
-			<L1 type="double" units="dimensionless"
-				description="Attachment rate">2320</L1>
-			<L2 type="double" units="dimensionless"
-				description="Attachment rate">2320</L2>
-			<L3 type="double" units="dimensionless"
-				description="Attachment rate">2211</L3>
-			<L4 type="double" units="dimensionless"
-				description="Attachment rate">1757</L4>
-			<L5	type="double" units="dimensionless"
-				description="Attachment rate">1540</L5>
-			<L6 type="double" units="dimensionless"
-				description="Attachment rate">1392</L6>
-			<L7 type="double" units="dimensionless"
-				description="Attachment rate">1005</L7>
-			<L8 type="double" units="dimensionless"
-				description="Attachment rate">868</L8>
-			<LV type="double" units="dimensionless"
-				description="Attachment rate">1700</LV>
-			<KVRel type="double" units="dimensionless"
-				description="Attachment rate">10</KVRel>
-			<NNucNP type="double" units="dimensionless"
-				description="Attachment rate">24</NNucNP>
-			<NNucM1 type="double" units="dimensionless"
-				description="Attachment rate">200</NNucM1>
-			<NNucNEP type="double" units="dimensionless"
-				description="Attachment rate">1700</NNucNEP>
-			<NPM1 type="double" units="dimensionless"
-				description="Attachment rate">3000</NPM1>
-			<NPM2 type="double" units="dimensionless"
-				description="Attachment rate">40</NPM2>
-			<NPRdRp type="double" units="dimensionless"
-				description="Attachment rate">45</NPRdRp>
-			<NPHA type="double" units="dimensionless"
-				description="Attachment rate">500</NPHA>
-			<NPNP type="double" units="dimensionless"
-				description="Attachment rate">1000</NPNP>
-			<NPNA type="double" units="dimensionless"
-				description="Attachment rate">100</NPNA>
-			<NPNEP type="double" units="dimensionless"
-				description="Attachment rate">165</NPNEP>
-										
-							
-	double NPNA = parameters.doubles("NPNA");
-	double NPNEP = parameters.doubles("NPNEP");
-	
+			<kImp type="double" units="1/min"
+				description="Nuclear import rate">0.1</kImp>
+			<kRel type="double" units="virions/min"
+				description="Virus release rate">6.1667e-5</kRel>
+			<gamnuc type="double" units="1/min"
+				description="RNA synthesis rate">0.0232</gamnuc>
+			<KVnuc type="double" units="virions"
+				description="max virion production">1e4</KVnuc>
 	</user_parameters>
 	
 </PhysiCell_settings>

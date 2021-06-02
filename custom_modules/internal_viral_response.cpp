@@ -17,19 +17,22 @@ void simple_internal_virus_response_model_setup( void )
 	internal_virus_response_model_info.phenotype_function = simple_internal_virus_response_model; 
 	internal_virus_response_model_info.mechanics_function = NULL; 
 	
+	// what microenvironment variables do you need 
+	internal_virus_response_model_info.microenvironment_variables.push_back( "virion" ); 	
+	internal_virus_response_model_info.microenvironment_variables.push_back( "interferon 1" ); 		
 		// what microenvironment variables do you expect? 
 		// what custom data do I need? 
 	internal_virus_response_model_info.cell_variables.push_back( "r_max" ); 
 	internal_virus_response_model_info.cell_variables.push_back( "max_apoptosis_half_max" ); 
 	internal_virus_response_model_info.cell_variables.push_back( "apoptosis_hill_power" ); 	
-	internal_virus_response_model_info.cell_variables.push_back( "VEn" ); 	
 	internal_virus_response_model_info.cell_variables.push_back( "infected_cell_chemokine_secretion_activated" );
 	internal_virus_response_model_info.cell_variables.push_back( "infected_cell_chemokine_secretion_rate" );
 	internal_virus_response_model_info.cell_variables.push_back( "activated_cytokine_secretion_rate" );
 	
 	
+	internal_virus_response_model_info.cell_variables.push_back( "VEn" ); 	
+	internal_virus_response_model_info.cell_variables.push_back( "Vnuc" ); 
 	internal_virus_response_model_info.cell_variables.push_back( "VRel" ); 
-	internal_virus_response_model_info.cell_variables.push_back( "rRel" ); 	
 	
 		// register the submodel  
 	internal_virus_response_model_info.register_model();	
@@ -41,20 +44,18 @@ void simple_internal_virus_response_model_setup( void )
 	
 	return; 
 }
-void influenza_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, double dt )
-{
-	
-	
-	return;
-}
 
 void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, double dt )
 {
+	
+		double Vnuc = pCell->custom_data["Vnuc"];
+	if(pCell->custom_data["Vnuc"]<1e-6)
+	{return;}
+	
 	static Cell_Definition* pCD = find_cell_definition( "lung epithelium" ); 
 	
 	// bookkeeping -- find microenvironment variables we need
 	static int nV_external = microenvironment.find_density_index( "virion" ); 
-	static int nA_external = microenvironment.find_density_index( "assembled virion" ); 
 	static int chemokine_index = microenvironment.find_density_index( "chemokine" );
 	static int IFN_index = microenvironment.find_density_index( "interferon 1" );
 	
@@ -62,65 +63,21 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 	
 	static int nV_internal = pCell->custom_data.find_variable_index( "virion" ); 
 	
-	// infected cells starts secreting based on VRel part of model
-	
-	if(pCell->custom_data["VRel"]>1e-16)
-	{
-		std::cout<<"VRel: "<<pCell->custom_data["VRel"]<<std::endl;
-		// secretion rate is equal to the rate virus unbinds from receptors plus secretion of new virions
-		pCell->phenotype.secretion.secretion_rates[nV_external] = pCell->custom_data["rRel"]/Vvoxel;
-		//kDislo*VAttlo+kDishi*VAtthi+pCell->custom_data["rRel"]/Vvoxel;
-		std::cout<<"Secretion rate: "<<pCell->phenotype.secretion.secretion_rates[nV_external]<<std::endl;
-		//flag for macrophages that cell has started secreting virions and can now be eaten
+	simple_viral_secretion_model( pCell, phenotype, dt );
 		
-	}
-	
-	
 	// over the life time of infection there is a small probability of death
 	static int apoptosis_model_index = cell_defaults.phenotype.death.find_death_model_index( "apoptosis" );
-	
-	double R = pCell->phenotype.molecular.internalized_total_substrates[nV_external];
-	
-	// base death rate (from cell line)
-	double base_death_rate = 
-		pCD->phenotype.death.rates[apoptosis_model_index]; 
-	
-	// additional death rate from infectoin  
-	double additional_death_rate = pCell->custom_data["r_max"] ; 
-	
-	double v = pCell->phenotype.molecular.internalized_total_substrates[nV_external] / 
-		pCell->custom_data["max_apoptosis_half_max"] ; 
-	v = pow( v, pCell->custom_data["apoptosis_hill_power"] ); 
-	
-	double effect = v / (1.0+v); 
-	additional_death_rate *= effect; 
-	phenotype.death.rates[apoptosis_model_index] = base_death_rate + additional_death_rate; 
-	
-	// if we're infected, secrete a chemokine for the immune model
-	double AV = pCell->phenotype.molecular.internalized_total_substrates[nV_external];  
-	
+	phenotype.death.rates[apoptosis_model_index] = parameters.doubles("r_max");//base_death_rate + additional_death_rate; 
+		
 	static int proinflammatory_cytokine_index = microenvironment.find_density_index( "pro-inflammatory cytokine");
-		
-		
-		
-	return;
-
-	// this is the old viral response model - need to make changes to new models 
-		
-	
-	if( R >= parameters.doubles("Infection_detection_threshold")/Vvoxel - 1e-16 ) 
+				
+	if( Vnuc >= parameters.doubles("Infection_detection_threshold")/Vvoxel - 1e-16 ) 
 	{
 		pCell->custom_data["infected_cell_chemokine_secretion_activated"] = 1.0; 
 	}
 
 	if( pCell->custom_data["infected_cell_chemokine_secretion_activated"] > 0.1 && phenotype.death.dead == false )
 	{
-		double rate = AV; 
-		rate /= pCell->custom_data["max_apoptosis_half_max"];
-		if( rate > 1.0 )
-		{ rate = 1.0; }
-		rate *= pCell->custom_data[ "infected_cell_chemokine_secretion_rate" ];
-
 		phenotype.secretion.secretion_rates[chemokine_index] = pCell->custom_data[ "infected_cell_chemokine_secretion_rate" ];//rate; 
 		phenotype.secretion.saturation_densities[chemokine_index] = 1.0;
 	
@@ -131,9 +88,43 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 		phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = pCell->custom_data["activated_cytokine_secretion_rate"];
 	}
 		
-		
-	
-		
-		
 	return; 	
 }
+
+void simple_viral_secretion_model( Cell* pCell, Phenotype& phenotype, double dt )
+{
+	
+		static int nV_external = microenvironment.find_density_index( "virion" ); 
+		double Vvoxel = microenvironment.mesh.voxels[1].volume;
+		
+		double VEx = pCell->nearest_density_vector()[nV_external]*Vvoxel;//pCell->custom_data["VEx"];
+		if(VEx<0)
+		{VEx = 0;}
+		double VAtthi = pCell->custom_data["VAtthi"];
+		double VAttlo = pCell->custom_data["VAttlo"];
+		double Bhi = pCell->custom_data["Bhi"];
+		double Blo = pCell->custom_data["Blo"];
+		double VEn = pCell->custom_data["VEn"];
+		double Vnuc = pCell->custom_data["Vnuc"];
+		double VRel = pCell->custom_data["VRel"];
+			
+		// drawing parameters for uptake from Heldt and Laske models
+		static double kAtthi = parameters.doubles("kAtthi");
+		static double kAttlo = parameters.doubles("kAttlo");
+		static double kDishi = parameters.doubles("kAtthi")/parameters.doubles("kEqhi");
+		static double kDislo = parameters.doubles("kAttlo")/parameters.doubles("kEqlo");
+		static double kEn = parameters.doubles("kEn");
+		static double Btothi = parameters.doubles("Btothi");
+		static double Btotlo = parameters.doubles("Btotlo");
+		static double kRel = parameters.doubles("kRel");
+		
+		pCell->custom_data["VRel"] += (kRel*Vnuc)*dt;
+		pCell->phenotype.secretion.secretion_rates[nV_external] = kDislo*VAttlo/Vvoxel+kDishi*VAtthi/Vvoxel+kRel*Vnuc/Vvoxel; // does this need a dt or virions in the first two terms?
+			
+		
+	return;
+}
+
+
+
+

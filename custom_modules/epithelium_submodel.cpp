@@ -34,17 +34,13 @@ void epithelium_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 	
 	// (Adrianne) ROS induced cell death model
 	ROS_induced_apoptosis(pCell, phenotype, dt);
-	
-	// (Adrianne) cell proliferation model
-	Cell_proliferation(pCell, phenotype, dt);
-		
+			
 	// if I am dead, remove all adhesions 
 	static int apoptosis_index = phenotype.death.find_death_model_index( "apoptosis" ); 
 	if( phenotype.death.dead == true )
 	{
 		// detach all attached cells 
 		// remove_all_adhesions( pCell ); 
-		
 		phenotype.secretion.secretion_rates[debris_index] = pCell->custom_data["debris_secretion_rate"]; 
 	}
 
@@ -156,7 +152,7 @@ void epithelium_submodel_setup( void )
 	simple_receptor_dynamics_model_setup(); // done 
 	// viral replication 
 	simple_internal_virus_model_setup();	
-	// single-cell response  XXXXXX THIS NEEDS TO BE EDITED STILL XXXXXXXXXXXXXXXXXXXXXXX
+	// single-cell response  
 	simple_internal_virus_response_model_setup(); 
  	
 	// set up epithelial cells
@@ -252,92 +248,4 @@ void ROS_induced_apoptosis( Cell* pCell, Phenotype& phenotype, double dt )
 	}
 	
 	return; 
-}
-
-void Cell_proliferation( Cell* pCell, Phenotype& phenotype, double dt )
-{
-		if(pCell->custom_data["cell_attachment_lifetime"]>50)
-	{std::cout<<"Cell attachment: "<<pCell->custom_data["cell_attachment_lifetime"]<<std::endl;
-		pCell->die();}
-			
-	/*int G0G1_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::G0G1_phase );
-	int S_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::S_phase );
-	
-	double c_j_ccr = 10;
-	double cell_radius = 8.4;
-	double A_cell = 4*3.141*cell_radius*cell_radius;
-	double A_frag = 800*800;
-	double K = 2793;
-	double pressure_threshold = 6.98;//6*c_j_ccr/A_cell*(1-1/(2*cell_radius)*sqrt(2*A_frag/(sqrt(3)*K)))/(0.02729*c_j_ccr/A_cell);
-	
-	// first - cells on boundary don't proliferate!
-	std::vector<double> cells_position(3);
-    cells_position = pCell->position;
-
-
-	if(cells_position[0]>default_microenvironment_options.X_range[1]-pCell->phenotype.geometry.radius*3
-	|| cells_position[0]<default_microenvironment_options.X_range[0]+pCell->phenotype.geometry.radius*3
-	|| cells_position[1]>default_microenvironment_options.Y_range[1]-pCell->phenotype.geometry.radius*3
-	|| cells_position[1]<default_microenvironment_options.Y_range[0]+pCell->phenotype.geometry.radius*3)
-	{	
-		pCell->phenotype.cycle.data.transition_rate( G0G1_index , S_index ) = 0;
-		return;
-	}
-			
-	// if not boundary cell, and the simp press is less than threshold then proliferate
-	double simp_press = pCell->state.simple_pressure;//calculate_simple_pressure_again(pCell);
-	if(simp_press<0.53 )//parameters.doubles("pressure_threshold"))
-	{
-		if(simp_press>1e-6)
-		{//std::cout<<simp_press<<std::endl;
-		pCell->phenotype.cycle.data.transition_rate( G0G1_index , S_index ) = parameters.doubles("epithelial_cell_proliferation_rate");
-		pCell->is_movable=true;
-		pCell->phenotype.motility.migration_speed = 0.05;
-		}
-	}
-	else
-	{
-		pCell->phenotype.cycle.data.transition_rate( G0G1_index , S_index ) = 0.0;
-		//pCell->is_movable=false;
-		//pCell->phenotype.motility.migration_speed = 0.01;
-	}
-	*/
-	return;
-
-}
-
-double calculate_simple_pressure_again(Cell* pCell)
-{
-	
-	// 12 uniform neighbors at a close packing distance, after dividing out all constants
-	static double simple_pressure_scale = 0.027288820670331; // 12 * (1 - sqrt(pi/(2*sqrt(3))))^2 
-	// 9.820170012151277; // 12 * ( 1 - sqrt(2*pi/sqrt(3)))^2''
-	
-	std::vector<Cell*> neighbors = pCell->cells_in_my_container(); 
-
-	// if the only cell is pCell, return simp_press of 0 (as in there is no pressure so cell can proliferate)
-	if( neighbors.size() < 2 )
-	{return 0.0; } 
-
-	double simp_press = 0; 
-	int n = 0; 
-	Cell* pContactCell = neighbors[n]; 
-	while( n < neighbors.size() )
-	{
-		pContactCell = neighbors[n]; 
-		if(pContactCell->type == pCell->type)
-		{	double distance = 1-sqrt((pContactCell->position[0]-pCell->position[0])*(pContactCell->position[0]-pCell->position[0])+(pContactCell->position[1]-pCell->position[1])*(pContactCell->position[1]-pCell->position[1]));
-			double distance_norm_to_radius = distance/(2*pCell->phenotype.geometry.radius);
-			double displacement = 1-distance_norm_to_radius;
-			simp_press += displacement*displacement;
-		}
-		else		
-		{simp_press +=0;}
-		n++;
-	}
-	
-	pCell->custom_data["displacement_stor"] = simp_press;
-		
-	return simp_press;
-
 }

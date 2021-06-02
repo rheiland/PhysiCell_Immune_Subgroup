@@ -129,42 +129,12 @@ void create_cell_types( void )
 
 void setup_microenvironment( void )
 {
-	// set domain parameters 
-	
-/* now this is in XML 
-	default_microenvironment_options.X_range = {-1000, 1000}; 
-	default_microenvironment_options.Y_range = {-1000, 1000}; 
-	default_microenvironment_options.simulate_2D = true; 
-*/
-	
 	// make sure to override and go back to 2D 
 	if( default_microenvironment_options.simulate_2D == false )
 	{
 		std::cout << "Warning: overriding XML config option and setting to 2D!" << std::endl; 
 		default_microenvironment_options.simulate_2D = true; 
 	}
-	
-/* now this is in XML 	
-	// no gradients need for this example 
-
-	default_microenvironment_options.calculate_gradients = false; 
-	
-	// set Dirichlet conditions 
-
-	default_microenvironment_options.outer_Dirichlet_conditions = true;
-	
-	// if there are more substrates, resize accordingly 
-	std::vector<double> bc_vector( 1 , 38.0 ); // 5% o2
-	default_microenvironment_options.Dirichlet_condition_vector = bc_vector;
-	
-	// set initial conditions 
-	default_microenvironment_options.initial_condition_vector = { 38.0 }; 
-*/
-	
-	// put any custom code to set non-homogeneous initial conditions or 
-	// extra Dirichlet nodes here. 
-	
-	// initialize BioFVM 
 	
 	initialize_microenvironment(); 	
 	
@@ -247,11 +217,11 @@ void setup_tissue( void )
 		double Vvoxel = microenvironment.mesh.voxels[1].volume;
 		pNearestCell->phenotype.molecular.internalized_total_substrates[ nV ] = 1.0/Vvoxel; 
 	}
-	else if( parameters.bools( "use_small_tissue") == true )
+	else if( parameters.bools( "initial_condition_small_tissue") == true )
 	{
 		std::vector<double> position = {0,0,0};
 		int m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[nV] += single_virion_density_change*50;
+		microenvironment(m)[nV] += single_virion_density_change;//*50;
 		position[0] = 50;
 		m = microenvironment.nearest_voxel_index( position ); 
 		microenvironment(m)[nV] += single_virion_density_change*50;
@@ -261,26 +231,9 @@ void setup_tissue( void )
 		position[0] = -100;
 		m = microenvironment.nearest_voxel_index( position ); 
 		microenvironment(m)[nV] += single_virion_density_change*50;
-		
 	}
-	else if( parameters.bools( "use_multiple_initial_injection_points") == true )
+	else if( parameters.bools( "initial_condition_large_tissue") == true )
 	{
-		// (adrianne) assign N random points in the domain for the initial virus to be placed
-		/*int number_of_initial_places =  parameters.ints("Number_of_virion_arrival_points");
-		
-		for(int n=0; n<number_of_initial_places; n++)
-		{
-			double increment = 100;
-			std::vector<double> position = {0,0,0}; 
-			position[0] = x_min+increment + (x_max-increment-(x_min+increment))*UniformRandom(); 
-			position[1] = y_min+increment + (y_max-increment-(y_min+increment))*UniformRandom(); 
-			
-			int m = microenvironment.nearest_voxel_index( position ); 
-			
-			// int n = (int) ( ( microenvironment.number_of_voxels()-1.0 ) * UniformRandom() ); 
-			// microenvironment(i,j)[nV] += single_virion_density_change; 
-			microenvironment(m)[nV] += single_virion_density_change*5; /// XXXXXXX
-		}*/
 		std::vector<double> position = {0,0,0};
 		position[0] = -4000+1600;
 		int m = microenvironment.nearest_voxel_index( position ); 
@@ -345,9 +298,6 @@ void setup_tissue( void )
 			position[1] = y_min + (y_max-y_min)*UniformRandom(); 
 			
 			int m = microenvironment.nearest_voxel_index( position ); 
-			
-			// int n = (int) ( ( microenvironment.number_of_voxels()-1.0 ) * UniformRandom() ); 
-			// microenvironment(i,j)[nV] += single_virion_density_change; 
 			microenvironment(m)[nV] += single_virion_density_change; 
 		}
 	}
@@ -365,26 +315,20 @@ std::vector<std::string> epithelium_coloring_function( Cell* pCell )
 	
 	if( pCell->phenotype.death.dead == false )
 	{
-		
-		static int nV_external = microenvironment.find_density_index( "virion" ); 
-		double Vvoxel = microenvironment.mesh.voxels[1].volume;
-		// find fraction of max viral load 
-		double v = pCell->phenotype.molecular.internalized_total_substrates[nV_external]*Vvoxel;
+		double Vnuc = pCell->custom_data["Vnuc" ];
 				
 		double interpolation = 0; 
-		if( v < 1 )
+		if( Vnuc < 1 )
 		{ interpolation = 0; } 
-		if( v >= 1.0 && v < 10 )
+		if( Vnuc >= 1.0 && Vnuc < 100 )
 		{ interpolation = 0.25;} 
-		if( v >= 10.0 && v < 100 )
+		if( Vnuc >= 100.0 && Vnuc < 1000 )
 		{ interpolation = 0.5; } 
-		if( v >= 100.0 && v < 1000 )
+		if( Vnuc >= 1000.0 && Vnuc < 10000 )
 		{ interpolation = 0.75; } 
-		if( v >= 1000.0 )
-		{ 		//std::cout<<v<<std::endl;
-	interpolation = 1.0;}    	
+		if( Vnuc >= 10000.0 )
+		{ interpolation = 1.0;}    	
 		
-
 		int red = (int) floor( 255.0 * interpolation ) ; 
 		int green = red; 
 		int blue = 255 - red; 
@@ -400,39 +344,6 @@ std::vector<std::string> epithelium_coloring_function( Cell* pCell )
 	return output; 
 }
 
-void move_exported_to_viral_field( void )
-{
-	static int nV = microenvironment.find_density_index( "virion" ); 
-	static int nA = microenvironment.find_density_index( "assembled virion" ); 
-	
-	#pragma omp parallel for 
-	for( int n = 0 ; n < microenvironment.number_of_voxels() ; n++ )
-	{
-		microenvironment(n)[nV] += microenvironment(n)[nA]; 
-		microenvironment(n)[nA] = 0; 
-	}
-	
-	return;
-}
-
-std::string blue_yellow_interpolation( double min, double val, double max )
-{
-// 	std::string out;
-	
-	double interpolation = (val-min)/(max-min+1e-16); 
-	if( interpolation < 0.0 )
-	{ interpolation = 0.0; } 
-	if( interpolation > 1.0 )
-	{ interpolation = 1.0; }
-	
-	int red_green = (int) floor( 255.0 * interpolation ) ; 
-	int blue = 255 - red_green; 
-
-	char color [1024]; 
-	sprintf( color, "rgb(%u,%u,%u)" , red_green,red_green,blue ); 
-	return color;  
-}
-
 std::vector<std::string> tissue_coloring_function( Cell* pCell )
 {
 	static int lung_epithelial_type = get_cell_definition( "lung epithelium" ).type; 
@@ -446,7 +357,6 @@ std::vector<std::string> tissue_coloring_function( Cell* pCell )
 	// start with white 
 	
 	std::vector<std::string> output = {"white", "black", "white" , "white" };	
-	// false_cell_coloring_cytometry(pCell); 
 	
 	if( pCell->phenotype.death.dead == true )
 	{
@@ -466,6 +376,13 @@ std::vector<std::string> tissue_coloring_function( Cell* pCell )
 
 	if( pCell->phenotype.death.dead == false && pCell->type == lung_epithelial_type )
 	{
+		if(pCell->custom_data["antiviral_state"]>0.5)
+		{
+			output[0] = "pink";	
+			output[2] = "pink";
+			output[3] = "pink";	
+			return output; 
+		}
 		// color by virion 
 		output = epithelium_coloring_function(pCell); 
 		return output; 
@@ -615,46 +532,7 @@ void SVG_plot_virus( std::string filename , Microenvironment& M, double z_slice 
   
 	double half_voxel_size = voxel_size / 2.0; 
 	double normalizer = 78.539816339744831 / (voxel_size*voxel_size*voxel_size); 
- 
- // color in the background ECM
-/* 
- if( ECM.TellRows() > 0 )
- {
-  // find the k corresponding to z_slice
-  
-  
-  
-  Vector position; 
-  *position(2) = z_slice; 
-  
 
-  // 25*pi* 5 microns^2 * length (in source) / voxelsize^3
-  
-  for( int j=0; j < ratio*ECM.TellCols() ; j++ )
-  {
-   // *position(1) = *Y_environment(j); 
-   *position(1) = *Y_environment(0) - dy_stroma/2.0 + j*voxel_size + half_voxel_size; 
-   
-   for( int i=0; i < ratio*ECM.TellRows() ; i++ )
-   {
-    // *position(0) = *X_environment(i); 
-    *position(0) = *X_environment(0) - dx_stroma/2.0 + i*voxel_size + half_voxel_size; 
-	
-    double E = evaluate_Matrix3( ECM, X_environment , Y_environment, Z_environment , position );	
-	double BV = normalizer * evaluate_Matrix3( OxygenSourceHD, X_environment , Y_environment, Z_environment , position );
-	if( isnan( BV ) )
-	{ BV = 0.0; }
-
-	vector<string> Colors;
-	Colors = hematoxylin_and_eosin_stroma_coloring( E , BV );
-	Write_SVG_rect( os , *position(0)-half_voxel_size-X_lower , *position(1)-half_voxel_size+top_margin-Y_lower, 
-	voxel_size , voxel_size , 1 , Colors[0], Colors[0] );
-   
-   }
-  }
- 
- }
-*/
 	os << "  </g>" << std::endl; 
 	
 	static Cell_Definition* pEpithelial = find_cell_definition( "lung epithelium" ); 
@@ -683,18 +561,8 @@ void SVG_plot_virus( std::string filename , Microenvironment& M, double z_slice 
 
 			Write_SVG_circle_opacity( os, (pC->position)[0]-X_lower, (pC->position)[1]-Y_lower, 
 				plot_radius , 0.5, Colors[1], Colors[0] , epithelial_opacity ); 
-	/*
-			// plot the nucleus if it, too intersects z = 0;
-			if( fabs(z) < rn && PhysiCell_SVG_options.plot_nuclei == true )
-			{   
-				plot_radius = sqrt( rn*rn - z*z ); 
-			 	Write_SVG_circle( os, (pC->position)[0]-X_lower, (pC->position)[1]-Y_lower, 
-					plot_radius, 0.5, Colors[3],Colors[2]); 
-			}	
-				*/
 			os << "   </g>" << std::endl;
 		}
-		
 	}
 	
 	// plot intersecting non=epithelial cells 
@@ -720,15 +588,6 @@ void SVG_plot_virus( std::string filename , Microenvironment& M, double z_slice 
 
 			Write_SVG_circle_opacity( os, (pC->position)[0]-X_lower, (pC->position)[1]-Y_lower, 
 				plot_radius , 0.5, Colors[1], Colors[0] , non_epithelial_opacity ); 
-/*
-			// plot the nucleus if it, too intersects z = 0;
-			if( fabs(z) < rn && PhysiCell_SVG_options.plot_nuclei == true )
-			{   
-				plot_radius = sqrt( rn*rn - z*z ); 
-			 	Write_SVG_circle( os, (pC->position)[0]-X_lower, (pC->position)[1]-Y_lower, 
-					plot_radius, 0.5, Colors[3],Colors[2]); 
-			}		
-*/			
 			os << "   </g>" << std::endl;
 		}
 		
@@ -736,32 +595,8 @@ void SVG_plot_virus( std::string filename , Microenvironment& M, double z_slice 
 	
 	os << "  </g>" << std::endl; 
 	
-	// plot intersecting BM points
-	/* 
-	 for( int i=0 ; i < BasementMembraneNodes.size() ; i++ )
-	 {
-		// vector<string> Colors = false_cell_coloring( pC ); 
-		BasementMembraneNode* pBMN = BasementMembraneNodes[i]; 
-		double thickness =0.1; 
-		
-		if( fabs( *(pBMN->Position)(2) - z_slice ) < thickness/2.0 ) 
-		{
-		 string bm_color ( "rgb(0,0,0)" );
-		 double r = thickness/2.0; 
-		 double z = fabs( *(pBMN->Position)(2) - z_slice) ; 
-
-		 os << " <g id=\"BMN" << pBMN->ID << "\">" << std::endl; 
-		 Write_SVG_circle( os,*(pBMN->Position)(0)-X_lower, *(pBMN->Position)(1)+top_margin-Y_lower, 10*thickness/2.0 , 0.5 , bm_color , bm_color ); 
-		 os << " </g>" << std::endl;
-		}
-		// pC = pC->pNextCell;
-	 }
-	*/ 
-	
-	// end of the <g ID="tissue">
 	os << " </g>" << std::endl; 
  
-	// draw a scale bar
  
 	double bar_margin = 0.025 * plot_height; 
 	double bar_height = 0.01 * plot_height; 

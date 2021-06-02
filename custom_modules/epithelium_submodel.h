@@ -28,8 +28,4 @@ void epithelium_submodel_setup( void );
 // (Adrianne) Model for ROS induction of cell apoptosis
 void ROS_induced_apoptosis( Cell* pCell, Phenotype& phenotype, double dt ); 
 
-// (Adrianne) Cell proliferation model based on local simple pressure
-void Cell_proliferation( Cell* pCell, Phenotype& phenotype, double dt ); 
-double calculate_simple_pressure_again(Cell* pCell);
-
 #endif 

@@ -1,6 +1,6 @@
 function solt = model_simulator_RK(parameters,initial_conditions)
 
-solt = ode45(@modemode,[0 9],initial_conditions); 
+solt = ode15s(@modemode,[0 12],initial_conditions); 
 
 function dydt = modemode(t,y,Z)	
 t

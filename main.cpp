@@ -242,7 +242,6 @@ int main( int argc, char* argv[] )
 			
 			process_tagged_cells_on_edge(); 
 			
-			move_exported_to_viral_field(); 
 			int dt_immune = parameters.ints( "immune_dt" );
 			if(PhysiCell_globals.current_time > time_tracker)
 			{immune_cell_recruitment( diffusion_dt );
