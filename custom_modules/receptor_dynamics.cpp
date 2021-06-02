@@ -64,7 +64,7 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 		
 		// drawing variables for uptake from Heldt and Laske models 
 		double VEx = pCell->nearest_density_vector()[nV_external]*Vvoxel;//pCell->custom_data["VEx"];
-		if(VEx<1)
+		if(VEx<1e-12)
 		{VEx = 0;}
 
 		double VAtthi = pCell->custom_data["VAtthi"];
@@ -73,6 +73,7 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 		double Blo = pCell->custom_data["Blo"];
 		double VEn = pCell->custom_data["VEn"];
 		double Vnuc = pCell->custom_data["Vnuc"];
+		double VRel = pCell->custom_data["VRel"];
 		
 		// drawing parameters for uptake from Heldt and Laske models
 		static double kAtthi = parameters.doubles("kAtthi");
@@ -103,7 +104,9 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 		
 		if(pCell->custom_data["antiviral_state"]<0.5) // cell isn't in an antiviral state
 		{pCell->phenotype.secretion.uptake_rates[nV_external] = 0;}
-		else if(VEx<1)
+		else if(VEx<1e-12)
+		{pCell->phenotype.secretion.uptake_rates[nV_external] = 0;}
+		else if(VRel>1)
 		{pCell->phenotype.secretion.uptake_rates[nV_external] = 0;}
 		else
 		{pCell->phenotype.secretion.uptake_rates[nV_external] = (kAtthi*Bhi+kAttlo*Blo);}
