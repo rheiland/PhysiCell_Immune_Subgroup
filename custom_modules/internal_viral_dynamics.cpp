@@ -76,7 +76,12 @@ void simple_intracellular_replication_model(  Cell* pCell, Phenotype& phenotype,
 		if(pCell->custom_data["eclipse_time"]<1)
 		{pCell->custom_data["eclipse_time"] = PhysiCell_globals.current_time+12*60;}
 	}
+	else if(pCell->custom_data["antiviral_state"]>0.5)
+	{
+		pCell->phenotype.molecular.internalized_total_substrates[vtest_external] = 0;
+	}
+	
 	pCell->custom_data["Vnuc"] = pCell->phenotype.molecular.internalized_total_substrates[vtest_external];	
-		
+	
 	return;	
 }

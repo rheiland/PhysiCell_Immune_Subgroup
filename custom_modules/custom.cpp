@@ -224,16 +224,16 @@ void setup_tissue( void )
 	{
 		std::vector<double> position = {0,0,0};
 		int m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*5;//*50;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;//*50;
 		position[0] = 100;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*5;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		position[0] = -50;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*5;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		position[0] = -150;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*5;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 	}
 	else if( parameters.bools( "initial_condition_large_tissue") == true )
 	{
@@ -383,9 +383,9 @@ std::vector<std::string> tissue_coloring_function( Cell* pCell )
 	{
 		if(pCell->custom_data["antiviral_state"]>0.5)
 		{
-			output[0] = "pink";	
-			output[2] = "pink";
-			output[3] = "pink";	
+			output[0] = "blue";	
+			output[2] = "blue";
+			output[3] = "blue";	
 			return output; 
 		}
 		// color by virion 

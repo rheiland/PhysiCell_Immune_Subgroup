@@ -57,7 +57,7 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 	double mhalf = 10;
 	double rhomax = 100;
 	
-	if(rho>1/8000)
+	if(rho>10/8000)
 	{
 		if(rho<rhomax/Vvoxel)
 		{
