@@ -1,13 +1,13 @@
 % Creating movie of substrates
 addpath('../output')
 var=1;
-timetotal =30;
+timetotal =79;
 A = 'output0000000';
 A2 = 'output000000';
 A3 = 'output00000'; 
 A4 = 'output0000'; 
 B = '.xml';
-virus_index = 1;
+virus_index = 7;
 IFN_index = 2;
 pro_cyto_index = 3;
 chemokine_index = 4;
@@ -107,7 +107,7 @@ for tcount = 2:timetotal
      MCDS.metadata.current_time , ...
      MCDS.metadata.time_units ) ); 
     
- virus_index = 1;
+ virus_index = 7;
 IFN_index = 2;
 pro_cyto_index = 3;
 chemokine_index = 4;

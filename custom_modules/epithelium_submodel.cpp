@@ -16,11 +16,9 @@ void epithelium_contact_function( Cell* pC1, Phenotype& p1, Cell* pC2, Phenotype
 
 void epithelium_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 {
+	
 	static int debris_index = microenvironment.find_density_index( "debris");
-	
-	// receptor dynamics 
-	// requires faster time scale - done in main function 
-	
+		
 	// viral dynamics model 
 	internal_viral_dynamics_info.phenotype_function(pCell,phenotype,dt); 
 	// internal_virus_model(pCell,phenotype,dt);
@@ -63,49 +61,13 @@ void epithelium_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 		// start the counter for the antiviral state - only lasts for 24 hours
 		pCell->custom_data["antiviral_state_timer"] = PhysiCell_globals.current_time+24*60*2;
 	}
-	//else if( pCell->custom_data["antiviral_state"]>0.5 &&  pCell->custom_data["antiviral_state_timer"]<PhysiCell_globals.current_time)
-	//{
-		//std::cout<<pCell->custom_data["antiviral_state_timer"]<<" "<<PhysiCell_globals.current_time<<std::endl;
-		//pCell->custom_data["antiviral_state"] = 0;
-	//}
-	
-/*
-	// cell secretion belongs in viral response 
-	
-	// if I am dead, make sure to still secrete the chemokine 
-	static int chemokine_index = microenvironment.find_density_index( "chemokine" ); 
-	static int nP = pCell->custom_data.find_variable_index( "viral_protein"); 
-	double P = pCell->custom_data[nP];
-	
-	static int nAV = pCell->custom_data.find_variable_index( "assembled_virion" ); 
-	double AV = pCell->custom_data[nAV]; 
-
-	static int nR = pCell->custom_data.find_variable_index( "viral_RNA");
-	double R = pCell->custom_data[nR];
-	
-	if( R >= 1.00 - 1e-16 ) 
-	{
-		pCell->custom_data["infected_cell_chemokine_secretion_activated"] = 1.0; 
-	}
-
-	if( pCell->custom_data["infected_cell_chemokine_secretion_activated"] > 0.1 && phenotype.death.dead == false )
-	{
-		double rate = AV; // P; 
-		rate /= pCell->custom_data["max_apoptosis_half_max"];
-		if( rate > 1.0 )
-		{ rate = 1.0; }
-		rate *= pCell->custom_data[ "infected_cell_chemokine_secretion_rate" ];
-
-		phenotype.secretion.secretion_rates[chemokine_index] = rate; 
-		phenotype.secretion.saturation_densities[chemokine_index] = 1.0; 
-	}
-*/	
-	
+		
 	// if I am dead, don't bother executing this function again 
 	if( phenotype.death.dead == true )
 	{
 		pCell->functions.update_phenotype = NULL; 
 	}
+	
 	
 	return; 
 }

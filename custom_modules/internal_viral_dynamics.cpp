@@ -56,19 +56,27 @@ void simple_internal_virus_model( Cell* pCell, Phenotype& phenotype, double dt )
 }
 void simple_intracellular_replication_model(  Cell* pCell, Phenotype& phenotype, double dt )
 {	
+
+	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
+	
 	double VEn = pCell->custom_data["VEn"];
-	double Vnuc = pCell->custom_data["Vnuc"];
+	
+	double Vconc = pCell->phenotype.molecular.internalized_total_substrates[vtest_external];
 		
-	static double kFus = parameters.doubles("kFus");
+		double Vvoxel = microenvironment.mesh.voxels[1].volume;
+	//static double kFus = parameters.doubles("kFus");
 	static double gamnuc = parameters.doubles("gamnuc");
-	static double KVnuc = parameters.doubles("KVnuc");
-		static double kRel = parameters.doubles("kRel");
+	static double KVnuc = parameters.doubles("KVnuc")/Vvoxel;
+	//static double kRel = parameters.doubles("kRel");
 	
 	//std::cout<<VEn<<" "<<Vnuc<<std::endl;
-	if(pCell->custom_data["antiviral_state"]<0.5) // cell isn't in an antiviral state
+	if(pCell->custom_data["antiviral_state"]<0.5&&pCell->phenotype.molecular.internalized_total_substrates[vtest_external]*Vvoxel>1) // cell isn't in an antiviral state
 	{	
-		pCell->custom_data["Vnuc"] += (kFus*VEn+gamnuc*Vnuc*(1-Vnuc/KVnuc))*dt;
+		pCell->phenotype.molecular.internalized_total_substrates[vtest_external] += gamnuc*Vconc*(1-Vconc/KVnuc)*dt;
+		if(pCell->custom_data["eclipse_time"]<1)
+		{pCell->custom_data["eclipse_time"] = PhysiCell_globals.current_time+12*60;}
 	}
-	
+	pCell->custom_data["Vnuc"] = pCell->phenotype.molecular.internalized_total_substrates[vtest_external];	
+		
 	return;	
 }

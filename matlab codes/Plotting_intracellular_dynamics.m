@@ -15,12 +15,12 @@ B = '.xml';
     end
     MCDS = read_MultiCellDS_xml(K);
   
-    VEx(tcount) = MCDS.discrete_cells.custom.VEx(3242);
-    VAtthi(tcount) = MCDS.discrete_cells.custom.VAtthi(3242);
-    VAttlo(tcount) = MCDS.discrete_cells.custom.VAttlo(3242);
-    VEn(tcount) = MCDS.discrete_cells.custom.VEn(3242);
-    Vnuc(tcount) = MCDS.discrete_cells.custom.Vnuc(3242);
-    VRel(tcount) = MCDS.discrete_cells.custom.VRel(3242);
+    VEx(tcount) = MCDS.discrete_cells.custom.VEx(3232);
+    VAtthi(tcount) = MCDS.discrete_cells.custom.VAtthi(3232);
+    VAttlo(tcount) = MCDS.discrete_cells.custom.VAttlo(3232);
+    VEn(tcount) = MCDS.discrete_cells.custom.VEn(3232);
+    Vnuc(tcount) = MCDS.discrete_cells.custom.Vnuc(3232);
+    VRel(tcount) = MCDS.discrete_cells.custom.VRel(3232);
 
     
  end
@@ -52,6 +52,6 @@ B = '.xml';
  
  figure
  hold on 
- plot(VRel)
+ plot(VRel/(20*20*20))
  title('VRel')
  

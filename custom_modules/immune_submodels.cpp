@@ -421,7 +421,9 @@ void CD8_Tcell_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 	int cycle_S_index = flow_cytometry_separated_cycle_model.find_phase_index( PhysiCell_constants::S_phase ); 
 	static int virus_index = microenvironment.find_density_index("virion");
 	int nV_external = virus_index;
-	double virus_amount = pCell->nearest_density_vector()[virus_index];
+	
+	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
+	double virus_amount = pCell->nearest_density_vector()[vtest_external];
 	
 	//if(virus_amount<1e-6)
 	//{pCell->phenotype.cycle.data.transition_rate(cycle_G0G1_index,cycle_S_index) = 0; }			
@@ -504,6 +506,7 @@ void CD8_Tcell_mechanics( Cell* pCell, Phenotype& phenotype, double dt )
 	
 	static int epithelial_type = get_cell_definition( "lung epithelium" ).type; 
 	static int nV_external = microenvironment.find_density_index("virion");
+	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
 	// check for contact with infected cell 
 	
 	// if I'm adhered to something ... 
@@ -621,6 +624,8 @@ void macrophage_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 	 
 	//(adrianne) adding virus uptake by phagocytes
 	static int virus_index = microenvironment.find_density_index("virion");
+	
+	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
 			
 	// no apoptosis until activation (resident macrophages in constant number for homeostasis) 
 	if( pCell->custom_data["activated_immune_cell"] < 0.5 )
@@ -733,7 +738,7 @@ void macrophage_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 				phenotype.secretion.uptake_rates[proinflammatory_cytokine_index] = 0.0; 
 				
 				//(adrianne) adding virus uptake by phagocytes
-				phenotype.secretion.uptake_rates[virus_index] = parameters.doubles("phagocytes_virus_uptake_rate");
+				phenotype.secretion.uptake_rates[vtest_external] = parameters.doubles("phagocytes_virus_uptake_rate");
 
 				phenotype.motility.migration_speed = pCell->custom_data["activated_speed"]; 
 				std::cout<<"Speed change "<<pTestCell->type_name<<std::endl;
@@ -770,7 +775,7 @@ void macrophage_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 				phenotype.secretion.uptake_rates[proinflammatory_cytokine_index] = 0.0; 
 				
 				//(adrianne) adding virus uptake by phagocytes
-				phenotype.secretion.uptake_rates[virus_index] = parameters.doubles("phagocytes_virus_uptake_rate");
+				phenotype.secretion.uptake_rates[vtest_external] = parameters.doubles("phagocytes_virus_uptake_rate");
 
 				phenotype.motility.migration_speed = pCell->custom_data["activated_speed"]; 
 					
@@ -803,7 +808,7 @@ void macrophage_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 				phenotype.secretion.uptake_rates[proinflammatory_cytokine_index] = 0.0; 
 
 				//(adrianne) adding virus uptake by phagocytes
-				phenotype.secretion.uptake_rates[virus_index] = parameters.doubles("phagocytes_virus_uptake_rate");
+				phenotype.secretion.uptake_rates[vtest_external] = parameters.doubles("phagocytes_virus_uptake_rate");
 
 				phenotype.motility.migration_speed = pCell->custom_data["activated_speed"]; 
 					
@@ -861,6 +866,7 @@ void neutrophil_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 			
 	//(adrianne) adding virus uptake by phagocytes
 	static int virus_index = microenvironment.find_density_index("virion");
+	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
 	static int ROS_index = microenvironment.find_density_index("ROS");
 	
 	// if dead, be dead
@@ -933,7 +939,7 @@ void neutrophil_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 			
 
 			//(adrianne) adding virus uptake by phagocytes
-			phenotype.secretion.uptake_rates[virus_index] = parameters.doubles("phagocytes_virus_uptake_rate"); 
+			phenotype.secretion.uptake_rates[vtest_external] = parameters.doubles("phagocytes_virus_uptake_rate"); 
 				
 			phenotype.motility.migration_speed = pCell->custom_data["activated_speed"]; 
 				
@@ -1034,9 +1040,12 @@ void DC_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 	{
 		
 		// (adrianne) DCs become activated if there is an infected cell in their neighbour with greater 1 viral protein or if the local amount of virus is greater than 10
-		static int virus_index = microenvironment.find_density_index("virion");
-		int nV_external = virus_index;
-		double virus_amount = pCell->nearest_density_vector()[virus_index];
+		static int nV_external = microenvironment.find_density_index("virion");
+		
+		
+	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
+		 
+		double virus_amount = pCell->nearest_density_vector()[vtest_external];
 		if( virus_amount*microenvironment.mesh.voxels[1].volume > parameters.doubles("virions_needed_for_DC_activation")) // (Adrianne) amount of virus in local voxel with DC is greater than 10
 		{
 			
@@ -1162,6 +1171,7 @@ void immune_submodels_setup( void )
 	CD8_submodel_info.mechanics_function = CD8_Tcell_mechanics; 
 		// what microenvironment variables do you expect? 
 	CD8_submodel_info.microenvironment_variables.push_back( "virion" ); 
+	CD8_submodel_info.microenvironment_variables.push_back( "VTEST" ); 
 	CD8_submodel_info.microenvironment_variables.push_back( "interferon 1" ); 
 	CD8_submodel_info.microenvironment_variables.push_back( "pro-inflammatory cytokine" ); 
 	CD8_submodel_info.microenvironment_variables.push_back( "chemokine" ); 
@@ -1252,6 +1262,7 @@ void immune_submodels_setup( void )
 	CD4_submodel_info.mechanics_function = CD4_Tcell_mechanics; 
 		// what microenvironment variables do you expect? 
 	CD4_submodel_info.microenvironment_variables.push_back( "virion" ); 
+	CD4_submodel_info.microenvironment_variables.push_back( "VTEST" ); 
 	CD4_submodel_info.microenvironment_variables.push_back( "interferon 1" ); 
 	CD4_submodel_info.microenvironment_variables.push_back( "pro-inflammatory cytokine" ); 
 	CD4_submodel_info.microenvironment_variables.push_back( "chemokine" ); 
@@ -1303,6 +1314,9 @@ Cell* check_for_dead_neighbor_for_interaction( Cell* pAttacker , double dt )
 bool attempt_immune_cell_attachment( Cell* pAttacker, Cell* pTarget , double dt )
 {
 	static int nV_external = microenvironment.find_density_index("virion");
+	
+	
+	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
 	//std::cout<<"attempt attachment"<<std::endl;
 	// if the target is not infected, give up 
 	if( pTarget->custom_data["Vnuc"]< pAttacker->custom_data[ "TCell_detection" ] )
