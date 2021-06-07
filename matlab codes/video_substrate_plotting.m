@@ -1,7 +1,7 @@
 % Creating movie of substrates
 addpath('../output')
 var=1;
-timetotal =79;
+timetotal =230;
 A = 'output0000000';
 A2 = 'output000000';
 A3 = 'output00000'; 
@@ -21,7 +21,7 @@ open(v)
 figure('Position', [50 50 900 700])
 hold on 
 
-for tcount = 2:timetotal
+for tcount = 100:timetotal
     clf
     if tcount<11
         K = [A num2str(tcount-1,'%d') B];

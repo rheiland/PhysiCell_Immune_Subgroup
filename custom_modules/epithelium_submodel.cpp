@@ -18,6 +18,8 @@ void epithelium_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 {
 	
 	static int debris_index = microenvironment.find_density_index( "debris");
+	static int chemokine_index = microenvironment.find_density_index( "chemokine" );
+	static int proinflammatory_cytokine_index = microenvironment.find_density_index( "pro-inflammatory cytokine");
 		
 	// viral dynamics model 
 	internal_viral_dynamics_info.phenotype_function(pCell,phenotype,dt); 
@@ -51,7 +53,9 @@ void epithelium_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 	
 	double prob_prob = UniformRandom();
 	if(pCell->custom_data["antiviral_state_timer"]<PhysiCell_globals.current_time && prob_prob>IFN_prob )
-	{pCell->custom_data["antiviral_state"] = 0;}
+	{
+		//pCell->custom_data["antiviral_state"] = 0;
+	}
 	else if( prob_prob<IFN_prob && pCell->custom_data["antiviral_state"]<1 && pCell->custom_data["Vnuc"]<parameters.doubles("Infection_detection_threshold"))
 	{
 		// cell enters antiviral state
@@ -60,6 +64,8 @@ void epithelium_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 		
 		// start the counter for the antiviral state - only lasts for 24 hours
 		pCell->custom_data["antiviral_state_timer"] = PhysiCell_globals.current_time+24*60*2;
+		pCell->phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = 0;
+		pCell->phenotype.secretion.secretion_rates[chemokine_index] = 0;
 	}
 		
 	// if I am dead, don't bother executing this function again 
@@ -130,6 +136,7 @@ void epithelium_submodel_setup( void )
 	
 		// what microenvironment variables do you expect? 
 	epithelium_submodel_info.microenvironment_variables.push_back( "virion" ); 
+	epithelium_submodel_info.microenvironment_variables.push_back( "VTEST" ); 
 	epithelium_submodel_info.microenvironment_variables.push_back( "interferon 1" ); 
 	epithelium_submodel_info.microenvironment_variables.push_back( "pro-inflammatory cytokine" ); 
 	epithelium_submodel_info.microenvironment_variables.push_back( "chemokine" ); 
@@ -152,6 +159,7 @@ void TCell_induced_apoptosis( Cell* pCell, Phenotype& phenotype, double dt )
 	static int debris_index = microenvironment.find_density_index( "debris" ); 
 	static int proinflammatory_cytokine_index = microenvironment.find_density_index("pro-inflammatory cytokine");
 	static int virion_index = microenvironment.find_density_index("virion");
+	static int vtest_index = microenvironment.find_density_index("VTEST");
 	
 	
 	if( pCell->custom_data["TCell_contact_time"] > pCell->custom_data["TCell_contact_death_threshold"] )
@@ -171,6 +179,7 @@ void TCell_induced_apoptosis( Cell* pCell, Phenotype& phenotype, double dt )
 		pCell->phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = 0; 
 		pCell->phenotype.secretion.secretion_rates[debris_index] = pCell->custom_data["debris_secretion_rate"]; 
 		pCell->phenotype.molecular.fraction_released_at_death[virion_index] = parameters.doubles("virus_fraction_released_after_apoptosis");
+		pCell->phenotype.molecular.fraction_released_at_death[vtest_index] = parameters.doubles("virus_fraction_released_after_apoptosis");
 		
 		pCell->functions.update_phenotype = NULL; 
 	}

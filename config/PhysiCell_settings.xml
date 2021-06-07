@@ -74,10 +74,10 @@
 
 <PhysiCell_settings version="devel-version">
 	<domain>
-		<x_min>-1000</x_min>
-		<x_max>1000</x_max>
-		<y_min>-1000</y_min>
-		<y_max>1000</y_max>
+		<x_min>-4000</x_min>
+		<x_max>4000</x_max>
+		<y_min>-2500</y_min>
+		<y_max>2500</y_max>
 		<z_min>-10</z_min>
 		<z_max>10</z_max>
 		<dx>20</dx>
@@ -108,12 +108,12 @@
 		<folder>output</folder> <!-- use . for root --> 
 
 		<full_data>
-			<interval units="min">60</interval>
+			<interval units="min">240</interval>
 			<enable>true</enable>
 		</full_data>
 		
 		<SVG>
-			<interval units="min">60</interval>
+			<interval units="min">14400</interval>
 			<enable>true</enable>
 		</SVG>
 		
@@ -179,7 +179,7 @@
 		
 		<variable name="VTEST" units="virions/micron^3" ID="6">
 			<physical_parameter_set>
-				<diffusion_coefficient units="micron^2/min">60</diffusion_coefficient>  <!-- reduce the diffusion -->
+				<diffusion_coefficient units="micron^2/min">1</diffusion_coefficient>  <!-- reduce the diffusion -->
 				<decay_rate units="1/min">0.0039</decay_rate>  
 			</physical_parameter_set>
 			<initial_condition units="mol/micron^3">0</initial_condition>
@@ -594,7 +594,7 @@
 				</motility>
 
 				<secretion>
-					<substrate name="virion">
+					<substrate name="VTEST">
 						<uptake_rate units="1/min">0.1</uptake_rate> <!-- 0.001 --> 
 					</substrate> 	
 				</secretion>
@@ -647,7 +647,7 @@
 				</motility>
 
 				<secretion>
-					<substrate name="virion">
+					<substrate name="VTEST">
 						<uptake_rate units="1/min">0.1</uptake_rate> <!-- 0.001 --> 
 					</substrate> 	
 				</secretion>
@@ -740,9 +740,9 @@
 			<use_single_infected_cell type="bool" units="none" 
 				description="Infect center cell with one virion (overrides MOI)">false</use_single_infected_cell>
 			<initial_condition_small_tissue type="bool" units="none" 
-				description="Infect center cell with one virion (overrides MOI)">true</initial_condition_small_tissue>
+				description="Infect center cell with one virion (overrides MOI)">false</initial_condition_small_tissue>
 			<initial_condition_large_tissue type="bool" units="none" 
-				description="Infect center cell with one virion (overrides MOI)">false</initial_condition_large_tissue>
+				description="Infect center cell with one virion (overrides MOI)">true</initial_condition_large_tissue>
 			<Number_of_virion_arrival_points type="int" units="virions"
 				description="Number of places viruses arrive in the lungs">5</Number_of_virion_arrival_points>
 			<virus_fraction_released_at_death type="double" units="none" 
@@ -750,12 +750,12 @@
 			<number_of_CD8_Tcells type="int" units="none" 
 				description="initial number of CD8 T cells in tissue">0</number_of_CD8_Tcells>
 			<number_of_macrophages type="int" units="none" 
-				description="initial number of macrophages">4</number_of_macrophages><!-- 250 -->
+				description="initial number of macrophages">250</number_of_macrophages><!-- 250 -->
 			<number_of_neutrophils type="int" units="none" 
 				description="initial number of neutrophils">0</number_of_neutrophils>
 		<!-- (Adrianne) initial number of DCs in the lung -->
 			<number_of_DCs type="int" units="cells" 
-				description="initial number of Dendritic Cells">28</number_of_DCs> <!-- 640-->
+				description="initial number of Dendritic Cells">640</number_of_DCs> <!-- 640-->
 		<!-- (Adrianne) initial number of CD4 T cells in the lung -->
 			<number_of_CD4_Tcells type="int" units="none" 
 				description="initial number of CD4 Tcells in tissue">0</number_of_CD4_Tcells> 
@@ -818,7 +818,7 @@
 			<Neutrophil_color type="string" description="neutrophil color">cyan</Neutrophil_color>
 		<!-- (Adrianne)  Rate that neutrophils and macs uptake virus, needs to be determined from literature-->
 			<phagocytes_virus_uptake_rate type="double" units="none"
-				description="Rate that phagocytes uptake virus after activation">0.0001</phagocytes_virus_uptake_rate>
+				description="Rate that phagocytes uptake virus after activation">0.0018</phagocytes_virus_uptake_rate>
 		<!-- (Adrianne) Rate that neutrophils (activated) secrete ROS -->
 			<ROS_secretion_rate type="double" units="none"
 				description="Rate that neutrophils secrete ROS">9.977</ROS_secretion_rate>

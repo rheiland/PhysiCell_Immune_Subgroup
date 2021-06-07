@@ -70,7 +70,7 @@ void simple_intracellular_replication_model(  Cell* pCell, Phenotype& phenotype,
 	//static double kRel = parameters.doubles("kRel");
 	
 	//std::cout<<VEn<<" "<<Vnuc<<std::endl;
-	if(pCell->custom_data["antiviral_state"]<0.5&&pCell->phenotype.molecular.internalized_total_substrates[vtest_external]*Vvoxel>1) // cell isn't in an antiviral state
+	if(pCell->custom_data["antiviral_state"]<0.5&&pCell->phenotype.molecular.internalized_total_substrates[vtest_external]*Vvoxel>10) // cell isn't in an antiviral state
 	{	
 		pCell->phenotype.molecular.internalized_total_substrates[vtest_external] += gamnuc*Vconc*(1-Vconc/KVnuc)*dt;
 		if(pCell->custom_data["eclipse_time"]<1)

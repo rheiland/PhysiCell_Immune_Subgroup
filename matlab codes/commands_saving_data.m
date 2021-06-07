@@ -1,4 +1,4 @@
-timetotal = 43;
+timetotal = 239;
 A = 'output0000000';
 A2 = 'output000000';
 A3 = 'output00000';
@@ -19,7 +19,7 @@ for tcount = 1:timetotal
     deltax = abs(MCDS.mesh.X(1,1,k)-MCDS.mesh.X(1,2,k));
     deltay = abs(MCDS.mesh.Y(1,1,k)-MCDS.mesh.Y(2,1,k));
     
-    virion(tcount) = sum(sum(MCDS.continuum_variables(1).data(:,:,k)))*deltax*deltay*20;%virion
+    virion(tcount) = sum(sum(MCDS.continuum_variables(7).data(:,:,k)))*deltax*deltay*20;%virion
     IFN(tcount) = sum(sum(MCDS.continuum_variables(2).data(:,:,k)))*deltax*deltay*20;%debris
     cytokine(tcount) = sum(sum(MCDS.continuum_variables(3).data(:,:,k)))*deltax*deltay*20;%proinflamcytokine virion
     chemokine(tcount) = sum(sum(MCDS.continuum_variables(4).data(:,:,k)))*deltax*deltay*20;%chemokine
@@ -40,7 +40,10 @@ for tcount = 1:timetotal
     macrophagesactive(tcount) = length(intersect(find( MCDS.discrete_cells.metadata.type == 4),activated_immune)); %macs active
 
     dead(tcount) = length(intersect(MCDS.discrete_cells.dead_cells,find(MCDS.discrete_cells.metadata.type == 1)));
-    infected(tcount) = length(unique([find(MCDS.discrete_cells.custom.Vnuc>=1),MCDS.discrete_cells.dead_cells]));
+    those_withvirus = find(MCDS.discrete_cells.custom.Vnuc>=1/8000);
+    those_notdead_withvirus = those_withvirus;%intersect(MCDS.discrete_cells.live_cells,those_withvirus);
+    those_notantiviral = find(MCDS.discrete_cells.custom.antiviral_state<0.5);
+    infected(tcount) = length(intersect(those_notdead_withvirus,those_notantiviral));
     uninfected(tcount) = length(find( MCDS.discrete_cells.metadata.type == 1))-dead(tcount)-infected(tcount);
           
  end

@@ -869,6 +869,9 @@ void neutrophil_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
 	static int ROS_index = microenvironment.find_density_index("ROS");
 	
+	
+	double Vvoxel = microenvironment.mesh.voxels[1].volume;
+	
 	// if dead, be dead
 	if( phenotype.death.dead == true )
 	{
@@ -912,7 +915,7 @@ void neutrophil_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 		if( pTestCell != pCell && pTestCell->phenotype.death.dead == true && 
 			UniformRandom() < probability_of_phagocytosis && 
 			pTestCell->phenotype.volume.total < max_phagocytosis_volume &&
-			pTestCell->custom_data["Vnuc"]>parameters.doubles("Infection_detection_threshold") )
+			pTestCell->custom_data["Vnuc"]>parameters.doubles("Infection_detection_threshold")/Vvoxel )
 		{
 			// #pragma omp critical(neutrophil_eat)
 			{
@@ -1042,7 +1045,8 @@ void DC_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 		// (adrianne) DCs become activated if there is an infected cell in their neighbour with greater 1 viral protein or if the local amount of virus is greater than 10
 		static int nV_external = microenvironment.find_density_index("virion");
 		
-		
+	
+	double Vvoxel = microenvironment.mesh.voxels[1].volume;	
 	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
 		 
 		double virus_amount = pCell->nearest_density_vector()[vtest_external];
@@ -1060,7 +1064,7 @@ void DC_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 			{
 				pTestCell = neighbors[n]; 
 				// if it is not me and the target is dead 
-				if( pTestCell != pCell && pTestCell->phenotype.death.dead == false && pTestCell->custom_data["Vnuc"]>parameters.doubles("infection_detection_threshold") )
+				if( pTestCell != pCell && pTestCell->phenotype.death.dead == false && pTestCell->custom_data["Vnuc"]>parameters.doubles("infection_detection_threshold")/Vvoxel )
 				{			
 					pCell->custom_data["activated_immune_cell"] = 1.0; 
 					
@@ -1325,6 +1329,10 @@ bool attempt_immune_cell_attachment( Cell* pAttacker, Cell* pTarget , double dt 
 	// if the target cell is dead, give up 
 	if( pTarget->phenotype.death.dead == true )
 	{ return false; } 
+	
+	// if the target cell is attached to too many cells already, give up 
+	if( pTarget->state.number_of_attached_cells()>2)
+	{return false; } 
 
 	// if the target cell is too far away, give up 
 	std::vector<double> displacement = pTarget->position - pAttacker->position;

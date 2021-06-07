@@ -18,7 +18,8 @@ void simple_internal_virus_response_model_setup( void )
 	internal_virus_response_model_info.mechanics_function = NULL; 
 	
 	// what microenvironment variables do you need 
-	internal_virus_response_model_info.microenvironment_variables.push_back( "virion" ); 	
+	internal_virus_response_model_info.microenvironment_variables.push_back( "virion" ); 
+	internal_virus_response_model_info.microenvironment_variables.push_back( "VTEST" ); 		
 	internal_virus_response_model_info.microenvironment_variables.push_back( "interferon 1" ); 	
 	internal_virus_response_model_info.microenvironment_variables.push_back( "pro-inflammatory cytokine" ); 	
 	internal_virus_response_model_info.microenvironment_variables.push_back( "debris" ); 	
@@ -63,6 +64,7 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 	
 	static int chemokine_index = microenvironment.find_density_index( "chemokine" );
 	static int IFN_index = microenvironment.find_density_index( "interferon 1" );
+	static int proinflammatory_cytokine_index = microenvironment.find_density_index( "pro-inflammatory cytokine");
 	
 	double Vvoxel = microenvironment.mesh.voxels[1].volume;
 		
@@ -72,7 +74,6 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 	static int apoptosis_model_index = cell_defaults.phenotype.death.find_death_model_index( "apoptosis" );
 	phenotype.death.rates[apoptosis_model_index] = parameters.doubles("r_max");//base_death_rate + additional_death_rate; 
 		
-	static int proinflammatory_cytokine_index = microenvironment.find_density_index( "pro-inflammatory cytokine");
 				
 	if( Vnuc >= parameters.doubles("Infection_detection_threshold")/Vvoxel - 1e-16 ) 
 	{
@@ -88,9 +89,25 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 		phenotype.secretion.secretion_rates[IFN_index]=parameters.doubles("IFN_secretion_rate");
 
 		// (Adrianne) adding pro-inflammatory cytokine secretion by infected cells
-		phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = pCell->custom_data["activated_cytokine_secretion_rate"];
-		phenotype.secretion.secretion_rates[chemokine_index] = pCell->custom_data["activated_cytokine_secretion_rate"];
+		if(pCell->custom_data["antiviral_state"]<0.5)
+		{
+			double rate = Vnuc*Vvoxel;
+			rate /= pCell->custom_data["max_apoptosis_half_max"];
+			if(rate>1.0)
+			{rate = 1;}
+			rate *= pCell->custom_data["infected_cell_chemokine_secretion_rate"];
+			
+			pCell->phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = pCell->custom_data["activated_cytokine_secretion_rate"];
+			pCell->phenotype.secretion.secretion_rates[chemokine_index] = rate;
+		}
+		
 		//phenotype.secretion.secretion_rates[vtest_external]  = 1;
+	}
+	
+	if(pCell->custom_data["antiviral_state"]>0.5)
+	{
+			phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = 0;
+			phenotype.secretion.secretion_rates[chemokine_index] = 0;
 	}
 		
 	return; 	

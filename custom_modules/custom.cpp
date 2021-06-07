@@ -240,42 +240,42 @@ void setup_tissue( void )
 		std::vector<double> position = {0,0,0};
 		position[0] = -4000+1600;
 		int m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*15;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		position[0] = -4000+1600+1;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*15;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		position[0] = -4000+1600-1;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*15;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		position[0] = -4000+1600+2;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*15;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		
 		position[0] = -4000+2*1600;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*10;
+		microenvironment(m)[vtest_external] += single_virion_density_change*4;
 		position[0] = -4000+2*1600-1;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*10;
+		microenvironment(m)[vtest_external] += single_virion_density_change*4;
 		position[0] = -4000+2*1600+1;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*10;
+		microenvironment(m)[vtest_external] += single_virion_density_change*4;
 		position[0] = -4000+2*1600-2;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*10;
+		microenvironment(m)[vtest_external] += single_virion_density_change*4;
 		
 		position[0] = -4000+3*1600;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*20;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		position[0] = -4000+3*1600-1;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*20;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		position[0] = -4000+3*1600+2;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*20;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		position[0] = -4000+3*1600+1;
 		m = microenvironment.nearest_voxel_index( position ); 
-		microenvironment(m)[vtest_external] += single_virion_density_change*20;
+		microenvironment(m)[vtest_external] += single_virion_density_change*2;
 		
 		position[0] =-4000+4*1600;
 		m = microenvironment.nearest_voxel_index( position ); 
@@ -325,13 +325,13 @@ std::vector<std::string> epithelium_coloring_function( Cell* pCell )
 		double interpolation = 0; 
 		if( Vnuc < 1 )
 		{ interpolation = 0; } 
-		if( Vnuc >= 1.0 && Vnuc < 100 )
+		if( Vnuc >= 1.0 && Vnuc < 10 )
 		{ interpolation = 0.25;} 
-		if( Vnuc >= 100.0 && Vnuc < 1000 )
+		if( Vnuc >= 10.0 && Vnuc < 100 )
 		{ interpolation = 0.5; } 
-		if( Vnuc >= 1000.0 && Vnuc < 10000 )
+		if( Vnuc >= 100.0 && Vnuc < 1000 )
 		{ interpolation = 0.75; } 
-		if( Vnuc >= 10000.0 )
+		if( Vnuc >= 1000.0 )
 		{ interpolation = 1.0;}    	
 		
 		int red = (int) floor( 255.0 * interpolation ) ; 

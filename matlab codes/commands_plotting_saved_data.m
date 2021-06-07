@@ -1,6 +1,6 @@
 load('simulated_data.mat')
 
-hours_to_days = linspace(0,10,43);
+hours_to_days = linspace(0,10,239);
  
  figure
  hold on 

@@ -66,6 +66,7 @@ void simple_receptor_dynamics_model( Cell* pCell, Phenotype& phenotype, double d
 		else
 		{
 			pCell->phenotype.secretion.uptake_rates[vtest_external] = parameters.doubles("uEvirus")*(rhomax/Vvoxel/rho)*(mhalf/(m/Vvoxel+mhalf/Vvoxel));
+			std::cout<<pCell->phenotype.secretion.uptake_rates[vtest_external]<<std::endl;
 		}
 	}
 	else 

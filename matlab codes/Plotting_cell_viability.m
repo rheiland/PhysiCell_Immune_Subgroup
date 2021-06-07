@@ -25,8 +25,8 @@ B = '.xml';
   ind5(tcount) = length(find( MCDS.discrete_cells.metadata.type == 7)); %CD4
   
     dead_cells(tcount) = length(MCDS.discrete_cells.dead_cells);
-    infected_cells(tcount) = length(unique([find(MCDS.discrete_cells.custom.Virions_internalized>=1),MCDS.discrete_cells.dead_cells]));
-    uninfected = find(MCDS.discrete_cells.custom.Virions_internalized<1);
+    infected_cells(tcount) = length(unique([find(MCDS.discrete_cells.custom.Vnuc>=1),MCDS.discrete_cells.dead_cells]));
+    uninfected = find(MCDS.discrete_cells.custom.Vnuc<1);
     live_target_cells(tcount) = length(find( MCDS.discrete_cells.metadata.type == 1))-dead_cells(tcount)-infected_cells(tcount);
    
     k = find( MCDS.mesh.Z_coordinates == 0 ); 
@@ -44,7 +44,7 @@ B = '.xml';
     
  end
 
- hours_to_days = linspace(0,timetotal/(24*1),timetotal+1);
+ hours_to_days = linspace(0,timetotal/(24*1),timetotal);
  
  figure
  hold on 
