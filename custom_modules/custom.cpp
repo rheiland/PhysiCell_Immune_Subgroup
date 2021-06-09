@@ -204,10 +204,10 @@ void setup_tissue( void )
 		{
 			while( x < x_max)
 			{
-				if(x*x+y*y>radius_1*radius_1 &&
-				x*x+y*y>radius_2*radius_2 &&
-				x*x+y*y>radius_3*radius_3 &&
-				x*x+y*y>radius_4*radius_4)
+				if((x-bronchcentre1_x)*(x-bronchcentre1_x)+(y-bronchcentre1_y)*(y-bronchcentre1_y)>radius_1*radius_1 &&
+				(x-bronchcentre2_x)*(x-bronchcentre2_x)+(y-bronchcentre2_y)*(y-bronchcentre2_y)>radius_2*radius_2 &&
+				(x-bronchcentre3_x)*(x-bronchcentre3_x)+(y-bronchcentre3_y)*(y-bronchcentre3_y)>radius_3*radius_3 &&
+				(x-bronchcentre4_x)*(x-bronchcentre4_x)+(y-bronchcentre4_y)*(y-bronchcentre4_y)>radius_4*radius_4)
 				{
 					pC = create_cell( get_cell_definition("lung epithelium" ) ); 
 					pC->assign_position( x,y, 0.0 );
@@ -358,11 +358,11 @@ void setup_tissue( void )
 		
 		bronchcentre1_x = -4000+1600;
 		bronchcentre1_y = 600;
-		radius_1 = 120;
+		radius_1 = 130;
 		density_virions_1 = 2;
 		bronchcentre2_x = -4000+2*1600;
 		bronchcentre2_y = -1000;
-		radius_2 = 100;
+		radius_2 = 150;
 		density_virions_2 = 4;
 		bronchcentre3_x = -4000+3*1600;
 		bronchcentre3_y = 0;
@@ -370,7 +370,7 @@ void setup_tissue( void )
 		density_virions_3 = 2;
 		bronchcentre4_x = -4000+4*1600;
 		bronchcentre4_y = 2000;
-		radius_4 = 80;
+		radius_4 = 120;
 		density_virions_4 = 10;
 		
 		
@@ -378,13 +378,13 @@ void setup_tissue( void )
 		{
 			std::vector<double> Vectpos = microenvironment.mesh.voxels[n].center;
 			
-			if(Vectpos[0]*Vectpos[0]+Vectpos[1]*Vectpos[1]<radius_1*radius_1)//in bronchiole 1
+			if((Vectpos[0]-bronchcentre1_x)*(Vectpos[0]-bronchcentre1_x)+(Vectpos[1]-bronchcentre1_y)*(Vectpos[1]-bronchcentre1_y)<radius_1*radius_1)//in bronchiole 1
 			{microenvironment(n)[vtest_external] += single_virion_density_change*density_virions_1;}
-			else if(Vectpos[0]*Vectpos[0]+Vectpos[1]*Vectpos[1]<radius_2*radius_2)//in bronchiole 2
+			else if((Vectpos[0]-bronchcentre2_x)*(Vectpos[0]-bronchcentre2_x)+(Vectpos[1]-bronchcentre2_y)*(Vectpos[1]-bronchcentre2_y)<radius_2*radius_2)//in bronchiole 2
 			{microenvironment(n)[vtest_external] += single_virion_density_change*density_virions_2;}
-			else if(Vectpos[0]*Vectpos[0]+Vectpos[1]*Vectpos[1]<radius_3*radius_3)//in bronchiole 3
+			else if((Vectpos[0]-bronchcentre3_x)*(Vectpos[0]-bronchcentre3_x)+(Vectpos[1]-bronchcentre3_y)*(Vectpos[1]-bronchcentre3_y)<radius_3*radius_3)//in bronchiole 3
 			{microenvironment(n)[vtest_external] += single_virion_density_change*density_virions_3;}
-			else if(Vectpos[0]*Vectpos[0]+Vectpos[1]*Vectpos[1]<radius_4*radius_4)//in bronchiole 4
+			else if((Vectpos[0]-bronchcentre4_x)*(Vectpos[0]-bronchcentre4_x)+(Vectpos[1]-bronchcentre4_y)*(Vectpos[1]-bronchcentre4_y)<radius_4*radius_4)//in bronchiole 4
 			{microenvironment(n)[vtest_external] += single_virion_density_change*density_virions_4;}
 			
 		}

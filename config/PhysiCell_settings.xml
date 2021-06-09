@@ -113,7 +113,7 @@
 		</full_data>
 		
 		<SVG>
-			<interval units="min">2880</interval>
+			<interval units="min">2880</interval><!-- 2880-->
 			<enable>true</enable>
 		</SVG>
 		
@@ -752,12 +752,12 @@
 			<number_of_CD8_Tcells type="int" units="none" 
 				description="initial number of CD8 T cells in tissue">0</number_of_CD8_Tcells>
 			<number_of_macrophages type="int" units="none" 
-				description="initial number of macrophages">250</number_of_macrophages><!-- 250 -->
+				description="initial number of macrophages">640</number_of_macrophages><!-- 250 -->
 			<number_of_neutrophils type="int" units="none" 
 				description="initial number of neutrophils">0</number_of_neutrophils>
 		<!-- (Adrianne) initial number of DCs in the lung -->
 			<number_of_DCs type="int" units="cells" 
-				description="initial number of Dendritic Cells">640</number_of_DCs> <!-- 640-->
+				description="initial number of Dendritic Cells">1798</number_of_DCs> <!-- 640-->
 		<!-- (Adrianne) initial number of CD4 T cells in the lung -->
 			<number_of_CD4_Tcells type="int" units="none" 
 				description="initial number of CD4 Tcells in tissue">0</number_of_CD4_Tcells> 
