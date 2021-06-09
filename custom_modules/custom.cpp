@@ -177,36 +177,97 @@ void setup_tissue( void )
 	double nearest_distance_squared = 9e99; 
 	Cell* pNearestCell = NULL; 
 	
-	int n = 0; 
-	while( y < y_max )
-	{
-		while( x < x_max)
-		{
-			pC = create_cell( get_cell_definition("lung epithelium" ) ); 
-			pC->assign_position( x,y, 0.0 );
-			
-			double dx = x - center_x;
-			double dy = y - center_y; 
-			
-			double temp = dx*dx + dy*dy; 
-			if( temp < nearest_distance_squared )
-			{
-				nearest_distance_squared = temp;
-				pNearestCell = pC; 
-			}
-			x += spacing; 
-		}
-		x = x_min; 
+	int bronchcentre1_x = -4000+1600;
+	int bronchcentre1_y = 600;
+	int radius_1 = 120;
+	int density_virions_1 = 2;
+	int bronchcentre2_x = -4000+2*1600;
+	int bronchcentre2_y = -1000;
+	int radius_2 = 100;
+	int density_virions_2 = 4;
+	int bronchcentre3_x = -4000+3*1600;
+	int bronchcentre3_y = 0;
+	int radius_3 = 120;
+	int density_virions_3 = 2;
+	int bronchcentre4_x = -4000+4*1600;
+	int bronchcentre4_y = 2000;
+	int radius_4 = 80;
+	int density_virions_4 = 10;
 		
-		n++; 
-		y += triangle_stagger; 
-		// in odd rows, shift 
-		if( n % 2 == 1 )
+	if( parameters.bools( "initial_condition_large_tissue_bronchiole") == true )
+	{
+		// first bronchiole radius 120
+		std::vector<double> position = {0,0,0};
+				
+		int n = 0; 
+		while( y < y_max )
 		{
-			x += 0.5 * spacing; 
+			while( x < x_max)
+			{
+				if(x*x+y*y>radius_1*radius_1 &&
+				x*x+y*y>radius_2*radius_2 &&
+				x*x+y*y>radius_3*radius_3 &&
+				x*x+y*y>radius_4*radius_4)
+				{
+					pC = create_cell( get_cell_definition("lung epithelium" ) ); 
+					pC->assign_position( x,y, 0.0 );
+				
+					double dx = x - center_x;
+					double dy = y - center_y; 
+					
+					double temp = dx*dx + dy*dy; 
+					if( temp < nearest_distance_squared )
+					{
+						nearest_distance_squared = temp;
+						pNearestCell = pC; 
+					}
+				}
+				x += spacing; 
+			}
+			x = x_min; 
+			
+			n++; 
+			y += triangle_stagger; 
+			// in odd rows, shift 
+			if( n % 2 == 1 )
+			{
+				x += 0.5 * spacing; 
+			}
+		}		
+	}
+	else
+		{
+		
+		int n = 0; 
+		while( y < y_max )
+		{
+			while( x < x_max)
+			{
+				pC = create_cell( get_cell_definition("lung epithelium" ) ); 
+				pC->assign_position( x,y, 0.0 );
+				
+				double dx = x - center_x;
+				double dy = y - center_y; 
+				
+				double temp = dx*dx + dy*dy; 
+				if( temp < nearest_distance_squared )
+				{
+					nearest_distance_squared = temp;
+					pNearestCell = pC; 
+				}
+				x += spacing; 
+			}
+			x = x_min; 
+			
+			n++; 
+			y += triangle_stagger; 
+			// in odd rows, shift 
+			if( n % 2 == 1 )
+			{
+				x += 0.5 * spacing; 
+			}
 		}
 	}
-	
 	int number_of_virions = (int) ( parameters.doubles("multiplicity_of_infection") * 
 		(*all_cells).size() ); 
 	double single_virion_density_change = 1.0 / microenvironment.mesh.dV; 
@@ -289,6 +350,45 @@ void setup_tissue( void )
 		position[0] =-4000+4*1600+2;
 		m = microenvironment.nearest_voxel_index( position ); 
 		microenvironment(m)[vtest_external] += single_virion_density_change*5;
+	}
+	else if( parameters.bools( "initial_condition_large_tissue_bronchiole") == true )
+	{
+		// first bronchiole radius 120
+		std::vector<double> position = {0,0,0};
+		
+		bronchcentre1_x = -4000+1600;
+		bronchcentre1_y = 600;
+		radius_1 = 120;
+		density_virions_1 = 2;
+		bronchcentre2_x = -4000+2*1600;
+		bronchcentre2_y = -1000;
+		radius_2 = 100;
+		density_virions_2 = 4;
+		bronchcentre3_x = -4000+3*1600;
+		bronchcentre3_y = 0;
+		radius_3 = 120;
+		density_virions_3 = 2;
+		bronchcentre4_x = -4000+4*1600;
+		bronchcentre4_y = 2000;
+		radius_4 = 80;
+		density_virions_4 = 10;
+		
+		
+		for( int n=0 ; n < microenvironment.mesh.voxels.size() ; n++ )
+		{
+			std::vector<double> Vectpos = microenvironment.mesh.voxels[n].center;
+			
+			if(Vectpos[0]*Vectpos[0]+Vectpos[1]*Vectpos[1]<radius_1*radius_1)//in bronchiole 1
+			{microenvironment(n)[vtest_external] += single_virion_density_change*density_virions_1;}
+			else if(Vectpos[0]*Vectpos[0]+Vectpos[1]*Vectpos[1]<radius_2*radius_2)//in bronchiole 2
+			{microenvironment(n)[vtest_external] += single_virion_density_change*density_virions_2;}
+			else if(Vectpos[0]*Vectpos[0]+Vectpos[1]*Vectpos[1]<radius_3*radius_3)//in bronchiole 3
+			{microenvironment(n)[vtest_external] += single_virion_density_change*density_virions_3;}
+			else if(Vectpos[0]*Vectpos[0]+Vectpos[1]*Vectpos[1]<radius_4*radius_4)//in bronchiole 4
+			{microenvironment(n)[vtest_external] += single_virion_density_change*density_virions_4;}
+			
+		}
+		
 	}
 	else
 	{		std::cout << "Placing " << number_of_virions << " virions ... " << std::endl; 

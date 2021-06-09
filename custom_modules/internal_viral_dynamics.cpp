@@ -59,6 +59,8 @@ void simple_intracellular_replication_model(  Cell* pCell, Phenotype& phenotype,
 
 	static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
 	
+	static int proinflammatory_cytokine_index = microenvironment.find_density_index( "pro-inflammatory cytokine");
+	
 	double VEn = pCell->custom_data["VEn"];
 	
 	double Vconc = pCell->phenotype.molecular.internalized_total_substrates[vtest_external];
@@ -79,8 +81,15 @@ void simple_intracellular_replication_model(  Cell* pCell, Phenotype& phenotype,
 	else if(pCell->custom_data["antiviral_state"]>0.5)
 	{
 		pCell->phenotype.molecular.internalized_total_substrates[vtest_external] = 0;
+		phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = 0;
 	}
-	
+	else if(pCell->phenotype.molecular.internalized_total_substrates[vtest_external]*Vvoxel<11)
+	{
+			double prob_infection_recognition = 0.3; // probability at low MOI a cell realises it's infected
+			if(UniformRandom()<prob_infection_recognition)
+			{pCell->phenotype.molecular.internalized_total_substrates[vtest_external] = 0;}
+			
+	}
 	pCell->custom_data["Vnuc"] = pCell->phenotype.molecular.internalized_total_substrates[vtest_external];	
 	
 	return;	

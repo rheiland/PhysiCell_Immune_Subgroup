@@ -1,18 +1,19 @@
 load('simulated_data.mat')
-
-hours_to_days = linspace(0,10,239);
+timetotal = 273;
+hours_to_days = linspace(0,10,timetotal);
  
  figure
  hold on 
  plot(hours_to_days,uninfected,'LineWidth',2)
  plot(hours_to_days,infected,'--','LineWidth',2)
  plot(hours_to_days,dead,':','LineWidth',2)
+ plot(hours_to_days,antiviral_cells,':','LineWidth',2)
  ylabel('Number of cells')
 % ylim([0 3000])
  yyaxis right
  plot(hours_to_days,virion','-.','LineWidth',2)
  ylabel('Total virions')
- legend('Uninfected cells','Infected cells','Dead cells','Virions')
+ legend('Uninfected cells','Infected cells','Dead cells','Antiviral cells','Virions')
  xlabel('Time (days)')
  set(gca,'FontSize',15)
  ax = gca;
@@ -23,7 +24,7 @@ hours_to_days = linspace(0,10,239);
  figure
  hold on
  plot(hours_to_days,macrophagesinactive,'Color',[0.04 0.31 0.49],'LineWidth',2)
- plot(hours_to_days,macrophagesinactive,'--','Color',[.3 .75 .93],'LineWidth',2)
+ plot(hours_to_days,macrophagesactive,'--','Color',[.3 .75 .93],'LineWidth',2)
  plot(hours_to_days,neutrophils,':','Color',[.47 .67 .19],'LineWidth',2)
  legend('Macrophages (inactive)','Macrophages (active)','Neutrophils')
  xlabel('Time (days)')
@@ -31,9 +32,20 @@ hours_to_days = linspace(0,10,239);
  set(gca,'FontSize',15)
  saveas(gcf,'F2.png')
  
+ 
+ figure
+ hold on
+ plot(hours_to_days,macrophagesinactive+macrophagesactive,'Color',[0.04 0.31 0.49],'LineWidth',2)
+ plot(hours_to_days,neutrophils,':','Color',[.47 .67 .19],'LineWidth',2)
+ plot(hours_to_days,DC,'Color',[1 0 0],'LineWidth',2)
+ legend('Total Macrophages','Neutrophils','Dendritic cells')
+ xlabel('Time (days)')
+ ylabel('Number of cells')
+ set(gca,'FontSize',15)
+ saveas(gcf,'F2.png')
+ 
 figure
  hold on
- plot(hours_to_days,DC,'Color',[1 0 0],'LineWidth',2)
  plot(hours_to_days,CD4,'--','Color',[1 0.07 0.65],'LineWidth',2)
  plot(hours_to_days,CD8,':','Color',[.64 .08 .18],'LineWidth',2)
   legend('DCs','CD8 T cells','CD4 T cells')

@@ -1,4 +1,4 @@
-timetotal = 239;
+timetotal = 273;
 A = 'output0000000';
 A2 = 'output000000';
 A3 = 'output00000';
@@ -45,7 +45,8 @@ for tcount = 1:timetotal
     those_notantiviral = find(MCDS.discrete_cells.custom.antiviral_state<0.5);
     infected(tcount) = length(intersect(those_notdead_withvirus,those_notantiviral));
     uninfected(tcount) = length(find( MCDS.discrete_cells.metadata.type == 1))-dead(tcount)-infected(tcount);
+    antiviral_cells(tcount) = length(find(MCDS.discrete_cells.custom.antiviral_state>0.5));
           
  end
  
- save('simulated_data.mat','virion','IFN','cytokine','chemokine','debris','ROS','CD8','neutrophils','DC','CD4','macrophagesinactive','macrophagesactive','dead','infected','uninfected')
+ save('simulated_data.mat','virion','IFN','cytokine','chemokine','debris','ROS','CD8','neutrophils','DC','CD4','macrophagesinactive','macrophagesactive','dead','infected','uninfected','antiviral_cells')

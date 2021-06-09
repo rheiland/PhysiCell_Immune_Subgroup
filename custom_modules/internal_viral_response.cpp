@@ -75,12 +75,12 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 	phenotype.death.rates[apoptosis_model_index] = parameters.doubles("r_max");//base_death_rate + additional_death_rate; 
 		
 				
-	if( Vnuc >= parameters.doubles("Infection_detection_threshold")/Vvoxel - 1e-16 ) 
+	if( Vnuc > parameters.doubles("Infection_detection_threshold")/Vvoxel - 1e-16 ) 
 	{
 		pCell->custom_data["infected_cell_chemokine_secretion_activated"] = 1.0; 
 	}
 
-	if( pCell->custom_data["infected_cell_chemokine_secretion_activated"] > 0.1 && phenotype.death.dead == false )
+	if( pCell->custom_data["infected_cell_chemokine_secretion_activated"] > 0.5 && phenotype.death.dead == false )
 	{
 		//phenotype.secretion.secretion_rates[chemokine_index] = pCell->custom_data[ "infected_cell_chemokine_secretion_rate" ];//rate; 
 		phenotype.secretion.saturation_densities[chemokine_index] = 1.0;
@@ -106,8 +106,9 @@ void simple_internal_virus_response_model( Cell* pCell, Phenotype& phenotype, do
 	
 	if(pCell->custom_data["antiviral_state"]>0.5)
 	{
-			phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = 0;
-			phenotype.secretion.secretion_rates[chemokine_index] = 0;
+			pCell->phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = 0;
+			pCell->phenotype.secretion.secretion_rates[chemokine_index] = 0;
+			pCell->custom_data["infected_cell_chemokine_secretion_activated"] = 0.5; 
 	}
 		
 	return; 	
@@ -119,11 +120,9 @@ void simple_viral_secretion_model( Cell* pCell, Phenotype& phenotype, double dt 
 	//std::cout<<pCell->phenotype.secretion.secretion_rates[nV_external]<<std::endl;
 	
 		static int nV_external = microenvironment.find_density_index( "virion" ); 
-		
-		
 		static int vtest_external = microenvironment.find_density_index( "VTEST" ); 
-	
-	
+		static int proinflammatory_cytokine_index = microenvironment.find_density_index( "pro-inflammatory cytokine");
+			
 		double Vvoxel = microenvironment.mesh.voxels[1].volume;
 		
 		if(pCell->phenotype.molecular.internalized_total_substrates[vtest_external]*Vvoxel>8e3 && PhysiCell_globals.current_time>pCell->custom_data["eclipse_time"])
@@ -133,6 +132,14 @@ void simple_viral_secretion_model( Cell* pCell, Phenotype& phenotype, double dt 
 		}
 		else
 		{pCell->phenotype.secretion.secretion_rates[vtest_external] = 0;}	
+	
+		if(pCell->custom_data["antiviral_state"]>0.5) // cell is in an antiviral state
+		{			
+			pCell->phenotype.secretion.secretion_rates[vtest_external] = 0;
+			pCell->phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = 0;
+			pCell->phenotype.molecular.internalized_total_substrates[vtest_external] = 0;
+			pCell->custom_data["Vnuc"] = 0;
+		}
 		
 		/*
 		double VEx = pCell->nearest_density_vector()[vtest_external]*Vvoxel;//pCell->custom_data["VEx"];

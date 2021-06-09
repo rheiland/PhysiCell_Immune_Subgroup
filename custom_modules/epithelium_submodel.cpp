@@ -81,6 +81,7 @@ void epithelium_phenotype( Cell* pCell, Phenotype& phenotype, double dt )
 void epithelium_mechanics( Cell* pCell, Phenotype& phenotype, double dt )
 {
 	static int debris_index = microenvironment.find_density_index( "debris");
+	static int proinflammatory_cytokine_index = microenvironment.find_density_index( "pro-inflammatory cytokine");
 	
 	pCell->is_movable = false; 
 	
@@ -96,6 +97,7 @@ void epithelium_mechanics( Cell* pCell, Phenotype& phenotype, double dt )
 		pCell->functions.contact_function = NULL; 
 
 		phenotype.secretion.secretion_rates[debris_index] = pCell->custom_data["debris_secretion_rate"]; 
+		phenotype.secretion.secretion_rates[proinflammatory_cytokine_index] = 0; 
 		return; 
 	}	
 	
@@ -170,7 +172,7 @@ void TCell_induced_apoptosis( Cell* pCell, Phenotype& phenotype, double dt )
 		
 		#pragma omp critical
 		{
-		std::cout << "\t\t\t\t" << pCell << " (of type " << pCell->type_name <<  ") died from T cell contact" << std::endl; 
+		//std::cout << "\t\t\t\t" << pCell << " (of type " << pCell->type_name <<  ") died from T cell contact" << std::endl; 
 		}
 		
 		// induce death 
@@ -208,7 +210,7 @@ void ROS_induced_apoptosis( Cell* pCell, Phenotype& phenotype, double dt )
 		
 		#pragma omp critical
 		{
-		std::cout << "\t\t\t\t" << pCell << " (of type " << pCell->type_name <<  ") died from ROS" << std::endl; 
+		//std::cout << "\t\t\t\t" << pCell << " (of type " << pCell->type_name <<  ") died from ROS" << std::endl; 
 		}
 		
 		// induce death 
